@@ -1,5 +1,5 @@
-from textual.widgets import *
-from textual.containers import *
+from textual.widgets import TextArea, Button, Label, Static, Checkbox, Select, Header
+from textual.containers import Vertical, Horizontal, VerticalScroll
 from textual.app import App, ComposeResult
 
 
