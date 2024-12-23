@@ -1,0 +1,4 @@
+
+/assets/dev_tools/logs
+*.pyc
+src/plutonium_launcher_tui/_version.py
