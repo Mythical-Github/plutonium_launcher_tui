@@ -23,7 +23,8 @@ classifiers = [
 ]
 dependencies = [
   "textual",
-  "pyjson5"
+  "pyjson5",
+  "textual-spinbox @ git+https://github.com/friscorose/textual-spinbox"
 ]
 
 [project.urls]
