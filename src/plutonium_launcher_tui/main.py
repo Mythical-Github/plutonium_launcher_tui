@@ -4,6 +4,7 @@ from textual.app import App, ComposeResult
 from textual.containers import Vertical, VerticalScroll
 from textual.widgets import TextArea, Static, Checkbox, Select, Header
 from textual_spinbox import SpinBox
+import webbrowser
 
 from plutonium_launcher_tui.base_widgets import *
 
@@ -248,16 +249,59 @@ class PlutoniumGameBar(Static):
             yield self.run_game_button
 
 
+def open_website(url: str):
+    try:
+        webbrowser.open(url, new=2)
+        return True
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return False
+
+
+class DocsButton(Static):
+    def compose(self) -> ComposeResult:
+        self.docs_button = BasePlutoniumLauncherButton(button_text='Docs')
+        yield self.docs_button
+    
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        url = 'https://plutonium.pw/docs/'
+        print_to_log_window(f'Opening website url: {url}')
+        open_website(url)
+
+
+class ForumsButton(Static):
+    def compose(self) -> ComposeResult:
+        self.forums_button = BasePlutoniumLauncherButton(button_text='Forums')
+        yield self.forums_button
+    
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        url = 'https://forum.plutonium.pw/'
+        print_to_log_window(f'Opening website url: {url}')
+        open_website(url)
+
+
+class GithubButton(Static):
+    def compose(self) -> ComposeResult:
+        self.github_button = BasePlutoniumLauncherButton(button_text='Github')
+        yield self.github_button
+    
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        url = 'https://github.com/Mythical-Github/plutonium_launcher_tui'
+        print_to_log_window(f'Opening website url: {url}')
+        open_website(url)
+
+
 class PlutoniumWebsiteBar(Static):
     def compose(self) -> ComposeResult:
         self.horizontal_box = BasePlutoniumLauncherHorizontalBox(padding=(0))
         with self.horizontal_box:
-            self.docs_button = BasePlutoniumLauncherButton(button_text='Docs')
-            self.github_button = BasePlutoniumLauncherButton(button_text='Github')
-            self.forums_button = BasePlutoniumLauncherButton(button_text='Forums')
+            self.docs_button = DocsButton()
+            self.github_button = GithubButton()
+            self.forums_button = ForumsButton()
             yield self.docs_button
             yield self.forums_button
             yield self.github_button
+        yield self.horizontal_box
 
 
 class PlutoniumLauncherLog(Static):
@@ -275,8 +319,13 @@ class PlutoniumLauncherLog(Static):
         return super().mount(*widgets, before=before, after=after)
 
 
+def print_to_log_window(message: str):
+    app.pluto_logger.rich_log.write(message)
+
+
 class PlutoniumLauncher(App):
     TITLE = 'Plutonium Launcher'
+    pluto_logger = PlutoniumLauncherLog()
     def compose(self) -> ComposeResult:
         self.main_vertical_scroll_box = VerticalScroll()
         with self.main_vertical_scroll_box:
@@ -288,7 +337,8 @@ class PlutoniumLauncher(App):
             yield PlutoniumGameAutoExecuteBar()
             yield PlutoniumGameBar()
             yield PlutoniumWebsiteBar()
-            yield PlutoniumLauncherLog()
+            yield self.pluto_logger
+            
 
     def on_mount(self):
         self.main_vertical_scroll_box.styles.margin = (0)
