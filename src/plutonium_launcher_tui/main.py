@@ -98,12 +98,12 @@ class PlutoniumGameAutoExecuteBar(Static):
         with self.horizontal_box:
             self.auto_execute_label = BasePlutoniumLauncherLabel(
                 'Auto Run Game:',
-                label_content_align=('left', 'middle')
+                label_content_align=('center', 'middle')
             )
             self.auto_execute_checkbox = Checkbox()
             self.auto_execute_delay_label = BasePlutoniumLauncherLabel(
                 'Delay in Seconds:',
-                label_content_align=('left', 'middle')
+                label_content_align=('center', 'middle')
             )
             self.auto_execute_delay_spin_box = SpinBox(iter_val=list(generate_spinbox_numbers()), init_val=1.0)
             yield self.auto_execute_label
@@ -113,10 +113,10 @@ class PlutoniumGameAutoExecuteBar(Static):
     
     
     def on_mount(self):
-        self.auto_execute_delay_spin_box.styles.width = '22%'
-        self.auto_execute_checkbox.styles.width = '14%'
-        self.auto_execute_label.styles.width = '28%'
-        self.auto_execute_delay_label.styles.width = '36%'
+        self.auto_execute_delay_spin_box.styles.width = '33%'
+        self.auto_execute_checkbox.styles.width = '10%'
+        self.auto_execute_label.styles.width = '26%'
+        self.auto_execute_delay_label.styles.width = '31%'
         self.auto_execute_checkbox.styles.content_align = ('center', 'middle')
 
 
@@ -141,7 +141,7 @@ class PlutoniumGameDirectoryBar(Static):
         self.select_dir_button.styles.text_align = 'center'
         self.select_dir_button.styles.align = ('center', 'middle')
         self.select_dir_button.styles.content_align = ('center', 'middle')
-        self.select_dir_button.styles.height = '100%'
+        self.select_dir_button.styles.height = 'auto'
 
 
 class PlutoniumGameModeSelector(Static):
@@ -237,13 +237,61 @@ class PlutoniumUserBar(Static):
         self.add_button.styles.content_align = ('center', 'middle')
 
 
+class AppDataButton(Static):
+    def compose(self) -> ComposeResult:
+        self.button = BasePlutoniumLauncherButton(button_text='AppData', button_width='100%')
+        yield self.button
+    
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        plutonium_appdata_folder = os.path.normpath(os.path.abspath(f'{os.getenv('APPDATA')}/../Local/Plutonium'))
+        open_directory_in_file_browser(plutonium_appdata_folder)
+
+    def mount(self, *widgets, before = None, after = None):
+        self.styles.width = '33%'
+        return super().mount(*widgets, before=before, after=after)
+
+
+class GameDirectoryButton(Static):
+    def compose(self) -> ComposeResult:
+        self.button = BasePlutoniumLauncherButton(button_text='Game Directory', button_width='100%')
+        yield self.button
+    
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        print_to_log_window(f'Game Directory')
+
+    def mount(self, *widgets, before = None, after = None):
+        self.styles.width = '33%'
+        return super().mount(*widgets, before=before, after=after)
+
+
+class RunGameButton(Static):
+    def compose(self) -> ComposeResult:
+        self.button = BasePlutoniumLauncherButton(button_text='Run Game', button_width='100%')
+        yield self.button
+    
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        print_to_log_window(f'Run Game')
+
+    def mount(self, *widgets, before = None, after = None):
+        self.styles.width = '33%'
+        return super().mount(*widgets, before=before, after=after)
+
+
+def open_directory_in_file_browser(directory_path: str):
+    if os.path.isdir(directory_path):
+        os.startfile(directory_path)
+        print_to_log_window(f'Opening the following directory in the file browser: "{directory_path}"')
+    else:
+        print_to_log_window(f"The specified path is not a directory: {directory_path}")
+
+
 class PlutoniumGameBar(Static):
     def compose(self) -> ComposeResult:
         self.horizontal_box = BasePlutoniumLauncherHorizontalBox()
         with self.horizontal_box:
-            self.app_data_button = BasePlutoniumLauncherButton(button_text='AppData')
-            self.game_dir_button = BasePlutoniumLauncherButton(button_text='Game Directory')
-            self.run_game_button = BasePlutoniumLauncherButton(button_text='Run Game')
+            self.app_data_button = AppDataButton()
+            self.game_dir_button = GameDirectoryButton()
+            self.run_game_button = RunGameButton()
             yield self.app_data_button
             yield self.game_dir_button
             yield self.run_game_button
@@ -260,7 +308,7 @@ def open_website(url: str):
 
 class DocsButton(Static):
     def compose(self) -> ComposeResult:
-        self.docs_button = BasePlutoniumLauncherButton(button_text='Docs')
+        self.docs_button = BasePlutoniumLauncherButton(button_text='Docs', button_width='100%')
         yield self.docs_button
     
     def on_button_pressed(self, event: Button.Pressed) -> None:
@@ -268,10 +316,14 @@ class DocsButton(Static):
         print_to_log_window(f'Opening website url: {url}')
         open_website(url)
 
+    def mount(self, *widgets, before = None, after = None):
+        self.styles.width = '33%'
+        return super().mount(*widgets, before=before, after=after)
+
 
 class ForumsButton(Static):
     def compose(self) -> ComposeResult:
-        self.forums_button = BasePlutoniumLauncherButton(button_text='Forums')
+        self.forums_button = BasePlutoniumLauncherButton(button_text='Forums', button_width='100%')
         yield self.forums_button
     
     def on_button_pressed(self, event: Button.Pressed) -> None:
@@ -279,10 +331,15 @@ class ForumsButton(Static):
         print_to_log_window(f'Opening website url: {url}')
         open_website(url)
 
+    def mount(self, *widgets, before = None, after = None):
+        self.styles.width = '33%'
+        return super().mount(*widgets, before=before, after=after)
+
+
 
 class GithubButton(Static):
     def compose(self) -> ComposeResult:
-        self.github_button = BasePlutoniumLauncherButton(button_text='Github')
+        self.github_button = BasePlutoniumLauncherButton(button_text='Github', button_width='100%')
         yield self.github_button
     
     def on_button_pressed(self, event: Button.Pressed) -> None:
@@ -290,14 +347,18 @@ class GithubButton(Static):
         print_to_log_window(f'Opening website url: {url}')
         open_website(url)
 
+    def mount(self, *widgets, before = None, after = None):
+        self.styles.width='33%'
+        return super().mount(*widgets, before=before, after=after)
+
 
 class PlutoniumWebsiteBar(Static):
     def compose(self) -> ComposeResult:
         self.horizontal_box = BasePlutoniumLauncherHorizontalBox(padding=(0))
+        self.docs_button = DocsButton()
+        self.github_button = GithubButton()
+        self.forums_button = ForumsButton()
         with self.horizontal_box:
-            self.docs_button = DocsButton()
-            self.github_button = GithubButton()
-            self.forums_button = ForumsButton()
             yield self.docs_button
             yield self.forums_button
             yield self.github_button
@@ -306,7 +367,7 @@ class PlutoniumWebsiteBar(Static):
 
 class PlutoniumLauncherLog(Static):
     def compose(self):
-        self.rich_log = RichLog()
+        self.rich_log = RichLog(wrap=True)
         yield self.rich_log
         return super().compose()
     
@@ -328,6 +389,7 @@ class PlutoniumLauncher(App):
     pluto_logger = PlutoniumLauncherLog()
     def compose(self) -> ComposeResult:
         self.main_vertical_scroll_box = VerticalScroll()
+        self.website_bar = PlutoniumWebsiteBar()
         with self.main_vertical_scroll_box:
             yield Header()
             yield PlutoniumGameSection()
@@ -336,7 +398,7 @@ class PlutoniumLauncher(App):
             yield PlutoniumGlobalArgsSection()
             yield PlutoniumGameAutoExecuteBar()
             yield PlutoniumGameBar()
-            yield PlutoniumWebsiteBar()
+            yield self.website_bar
             yield self.pluto_logger
             
 

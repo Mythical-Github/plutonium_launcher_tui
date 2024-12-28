@@ -1,14 +1,4 @@
 ascii pluto icon
-log at bottom
-game dir select button should not stretch to bottom, stay same anchored to top
 check fill on ayuto exuec and delay in seconds to be more compact   '
 
 fill out card and send tonight in mail,
-
-open pluto app dir button
-open game dir button
-run button
-
-Appdata
-Game Directory
-Run Game
