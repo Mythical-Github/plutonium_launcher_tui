@@ -8,16 +8,35 @@ from textual_spinbox import SpinBox
 from plutonium_launcher_tui.base_widgets import *
 
 
-class PlutoniumGameSpecificArgsSection(Static):
+class PlutoniumGlobalArgsSection(Static):
     def compose(self) -> ComposeResult:
         self.horizontal_box = BasePlutoniumLauncherHorizontalBox()
-        self.text_area = TextArea('default_arg_text')
-        self.game_args_label = BasePlutoniumLauncherLabel(label_text='Game Args:', label_height='auto')
-        self.add_button = BasePlutoniumLauncherButton(button_text='+', button_width='auto')
-        self.remove_button = BasePlutoniumLauncherButton(button_text='-', button_width='auto')
+
+        options = [
+            ('example_one', 1),
+            ('example_two', 2)
+        ]
+
+        self.combo_box: Select[int] = Select(options, allow_blank=False)
+
+        self.game_args_label = BasePlutoniumLauncherLabel(
+            label_text='Global Args:', 
+            label_height='auto'
+        )
+
+        self.add_button = BasePlutoniumLauncherButton(
+            button_text='+', 
+            button_width='auto'
+        )
+
+        self.remove_button = BasePlutoniumLauncherButton(
+            button_text='-', 
+            button_width='auto'
+        )
+
         with self.horizontal_box:
             yield self.game_args_label
-            yield self.text_area
+            yield self.combo_box
             yield self.remove_button
             yield self.add_button
         yield self.horizontal_box
@@ -25,12 +44,44 @@ class PlutoniumGameSpecificArgsSection(Static):
 
     def on_mount(self):
         self.game_args_label.styles.height = 'auto'
-        self.text_area.styles.height = 'auto'
-        self.text_area.styles.width = '24'
-        self.text_area.styles.content_align_horizontal = 'center'
-        self.text_area.styles.align_horizontal = 'center'
-        self.text_area.styles.text_align = 'center'
-        self.text_area.styles.content_align = ('center', 'middle')
+
+
+class PlutoniumGameSpecificArgsSection(Static):
+    def compose(self) -> ComposeResult:
+        self.horizontal_box = BasePlutoniumLauncherHorizontalBox()
+
+        options = [
+            ('example_one', 1),
+            ('example_two', 2)
+        ]
+
+        self.combo_box: Select[int] = Select(options, allow_blank=False)
+
+        self.game_args_label = BasePlutoniumLauncherLabel(
+            label_text='Game Args:', 
+            label_height='auto'
+        )
+
+        self.add_button = BasePlutoniumLauncherButton(
+            button_text='+', 
+            button_width='auto'
+        )
+
+        self.remove_button = BasePlutoniumLauncherButton(
+            button_text='-', 
+            button_width='auto'
+        )
+
+        with self.horizontal_box:
+            yield self.game_args_label
+            yield self.combo_box
+            yield self.remove_button
+            yield self.add_button
+        yield self.horizontal_box
+
+
+    def on_mount(self):
+        self.game_args_label.styles.height = 'auto'
 
 
 def generate_spinbox_numbers():
@@ -45,7 +96,7 @@ class PlutoniumGameAutoExecuteBar(Static):
         self.horizontal_box = BasePlutoniumLauncherHorizontalBox(width='100%')
         with self.horizontal_box:
             self.auto_execute_label = BasePlutoniumLauncherLabel(
-                'Auto Execute:',
+                'Auto Run Game:',
                 label_content_align=('left', 'middle')
             )
             self.auto_execute_checkbox = Checkbox()
@@ -146,7 +197,6 @@ class PlutoniumGameSection(Static):
         with self.vertical_box:
             yield PlutoniumGameSelector()
             yield PlutoniumGameModeSelector()
-            yield PlutoniumGameAutoExecuteBar()
             yield PlutoniumGameDirectoryBar()
     
 
@@ -186,9 +236,21 @@ class PlutoniumUserBar(Static):
         self.add_button.styles.content_align = ('center', 'middle')
 
 
-class PlutoniumWebsiteBar(Static):
+class PlutoniumGameBar(Static):
     def compose(self) -> ComposeResult:
         self.horizontal_box = BasePlutoniumLauncherHorizontalBox()
+        with self.horizontal_box:
+            self.app_data_button = BasePlutoniumLauncherButton(button_text='AppData')
+            self.game_dir_button = BasePlutoniumLauncherButton(button_text='Game Directory')
+            self.run_game_button = BasePlutoniumLauncherButton(button_text='Run Game')
+            yield self.app_data_button
+            yield self.game_dir_button
+            yield self.run_game_button
+
+
+class PlutoniumWebsiteBar(Static):
+    def compose(self) -> ComposeResult:
+        self.horizontal_box = BasePlutoniumLauncherHorizontalBox(padding=(0))
         with self.horizontal_box:
             self.docs_button = BasePlutoniumLauncherButton(button_text='Docs')
             self.github_button = BasePlutoniumLauncherButton(button_text='Github')
@@ -197,9 +259,20 @@ class PlutoniumWebsiteBar(Static):
             yield self.forums_button
             yield self.github_button
 
-    # def on_mount(self):
-    #     self.horizontal_box.styles.padding = 0
-    #     self.horizontal_box.styles.margin = 0
+
+class PlutoniumLauncherLog(Static):
+    def compose(self):
+        self.rich_log = RichLog()
+        yield self.rich_log
+        return super().compose()
+    
+    def mount(self, *widgets, before = None, after = None):
+        self.rich_log.styles.height = '6'
+        self.rich_log.styles.margin = 1
+        self.rich_log.styles.border = ('solid', 'grey')
+        self.rich_log.border_title = 'Logging'
+        self.rich_log.styles.width = '100%'
+        return super().mount(*widgets, before=before, after=after)
 
 
 class PlutoniumLauncher(App):
@@ -211,7 +284,11 @@ class PlutoniumLauncher(App):
             yield PlutoniumGameSection()
             yield PlutoniumUserBar()
             yield PlutoniumGameSpecificArgsSection()
+            yield PlutoniumGlobalArgsSection()
+            yield PlutoniumGameAutoExecuteBar()
+            yield PlutoniumGameBar()
             yield PlutoniumWebsiteBar()
+            yield PlutoniumLauncherLog()
 
     def on_mount(self):
         self.main_vertical_scroll_box.styles.margin = (0)
