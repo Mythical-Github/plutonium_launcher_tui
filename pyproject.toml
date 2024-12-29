@@ -25,7 +25,8 @@ dependencies = [
   "textual",
   "pyjson5",
   "textual-spinbox @ git+https://github.com/friscorose/textual-spinbox",
-  "tomlkit"
+  "tomlkit",
+  "pygetwindow"
 ]
 
 [project.urls]
@@ -63,7 +64,7 @@ dependencies = [
 
 [tool.hatch.envs.build.scripts]
 exe = [
-  "pyinstaller --noconfirm --onefile --console --name plutonium_launcher_tui --icon=assets/images/icons/project_main_icon.ico src/plutonium_launcher_tui/__main__.py",
+  "pyinstaller --noconfirm --onefile --noconsole --name plutonium_launcher_tui --icon=assets/images/icons/project_main_icon.ico src/plutonium_launcher_tui/__main__.py",
   "pyinstaller --noconfirm --onefile --console --name plutonium_launcher_tui --icon=assets/images/icons/project_main_icon.ico src/plutonium_launcher_tui/__main__.pyw"
 ]
 
