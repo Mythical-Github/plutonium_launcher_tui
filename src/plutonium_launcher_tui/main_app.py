@@ -2,7 +2,7 @@ from textual.app import App, ComposeResult
 from textual.containers import VerticalScroll
 from textual.widgets import Header
 
-from plutonium_launcher_tui.customization import set_theme, set_window_title
+from plutonium_launcher_tui.customization import set_theme, set_window_title, set_terminal_size
 from plutonium_launcher_tui.logger import plutonium_logger
 from plutonium_launcher_tui.plutonium_launcher_widgets import (
     PlutoniumGameAutoExecuteBar,
@@ -41,6 +41,8 @@ class PlutoniumLauncher(App):
 def run_main_app():
 
     set_window_title(app.TITLE)
+    
+    set_terminal_size(app, 420, 680)
 
     app.run()
 
