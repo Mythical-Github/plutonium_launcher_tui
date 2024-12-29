@@ -26,8 +26,9 @@ jobs:
 
       - name: Lint and fix code with Ruff
         uses: astral-sh/ruff-action@v2
-        with:
-          args: --fix
+
+      - name: Format code with Ruff
+        run: ruff check --fix
 
       - name: Format code with Ruff
         run: ruff format .
