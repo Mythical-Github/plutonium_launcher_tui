@@ -1,9 +1,11 @@
 import os
-import sys
-from shutil import get_terminal_size
+# import sys
+# from shutil import get_terminal_size
 
+import pygetwindow
 from textual.app import App
 from textual.theme import ThemeProvider
+
 
 
 def set_theme(app_instance: App, theme_name: str):
@@ -20,12 +22,25 @@ def set_theme(app_instance: App, theme_name: str):
         raise ValueError(error_message)
 
 
-def set_terminal_size(x: int, y: int):
-    os.system(f'mode con: cols={x} lines={y}')
+def set_terminal_size(app: App, x: int, y: int):
+    all_windows = pygetwindow.getAllWindows()
+    
+    windows = [win for win in all_windows if app.TITLE in win.title]
+    
+    for window in windows:
+        try:
+            window.resizeTo(x, y)
+            print(f"Resized window: {window.title} to {x}x{y}")
+        except Exception as e:
+            print(f"Failed to resize window {window.title}: {e}")
+
+
+def set_terminal_font_size(font_size: int):
+    return
 
 
 def set_window_title(window_title: str):
-    os.system(f'tit;e {window_title}')
+    os.system(f'title {window_title}')
 
 
 
