@@ -14,9 +14,10 @@ def set_theme(app_instance: App, theme_name: str):
             break
 
     if not theme_found:
-        raise ValueError(f'Theme "{theme_name}" not found.')
+        error_message = f'Theme "{theme_name}" not found.'
+        raise ValueError(error_message)
 
 
-def set_window_title(window_title:str):
-    sys.stdout.write(f'\033]0;{window_title}\007')
+def set_window_title(window_title: str):
+    sys.stdout.write(f"\033]0;{window_title}\007")
     sys.stdout.flush()

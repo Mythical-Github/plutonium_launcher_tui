@@ -1,18 +1,18 @@
-from textual.widgets import Button, Label 
 from textual.containers import Horizontal
+from textual.widgets import Button, Label
 
 
 class BasePlutoniumLauncherButton(Button):
     def __init__(
-            self, 
-            button_text: str = 'default_text',
-            button_width: str = '33%',
-            button_margin: int = 0,
-            button_min_width: int = 0,
-            button_min_height: int = 0,
-            button_border: str = 'none',
-            button_padding: int = 0
-        ):
+        self,
+        button_text: str = "default_text",
+        button_width: str = "33%",
+        button_margin: int = 0,
+        button_min_width: int = 0,
+        button_min_height: int = 0,
+        button_border: str = "none",
+        button_padding: int = 0,
+    ):
         super().__init__()
         self.label = button_text
         self.button_width = button_width
@@ -29,24 +29,24 @@ class BasePlutoniumLauncherButton(Button):
         self.styles.border = self.button_border
         self.styles.padding = self.button_padding
         self.styles.min_height = self.button_min_height
-        self.styles.border = ('solid', 'grey')
+        self.styles.border = ("solid", "grey")
 
 
 class BasePlutoniumLauncherLabel(Label):
     def __init__(
-            self, 
-            label_text: str = 'default label text',
-            label_border: list = ('solid', 'grey'),
-            label_padding: tuple = (0, 0, 0, 0),
-            label_margin: tuple = (0, 0, 0, 0),
-            label_height: any = 'auto',
-            label_min_height: any = 1,
-            label_max_height: any = '100',
-            label_width: any = 'auto',
-            label_min_width: any = 1,
-            label_max_width: any = '100',
-            label_content_align: list = ('center', 'middle')
-        ):
+        self,
+        label_text: str = "default label text",
+        label_border: list = ("solid", "grey"),
+        label_padding: tuple = (0, 0, 0, 0),
+        label_margin: tuple = (0, 0, 0, 0),
+        label_height: any = "auto",
+        label_min_height: any = 1,
+        label_max_height: any = "100",
+        label_width: any = "auto",
+        label_min_width: any = 1,
+        label_max_width: any = "100",
+        label_content_align: list = ("center", "middle"),
+    ):
         super().__init__(label_text)
         self.label_border = label_border
         self.label_padding = label_padding
@@ -74,14 +74,14 @@ class BasePlutoniumLauncherLabel(Label):
 
 class BasePlutoniumLauncherHorizontalBox(Horizontal):
     def __init__(
-            self,
-            content_align: list = ('center', 'middle'),
-            padding: list = (1, 0, 0, 0),
-            margin: list = (0, 0, 0, 0),
-            border: tuple = ('none', 'black'),
-            height: str = 'auto',
-            width: str = '100%'
-        ):
+        self,
+        content_align: list = ("center", "middle"),
+        padding: list = (1, 0, 0, 0),
+        margin: list = (0, 0, 0, 0),
+        border: tuple = ("none", "black"),
+        height: str = "auto",
+        width: str = "100%",
+    ):
         super().__init__()
         self.content_align = content_align
         self.padding = padding
