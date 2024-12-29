@@ -39,8 +39,9 @@ class PlutoniumLauncher(App):
         set_theme(app_instance=self, theme_name="dracula")
 
 
-app = PlutoniumLauncher()
+def main():
+    app = PlutoniumLauncher()
 
-set_window_title(app.TITLE)
+    set_window_title(app.TITLE)
 
-app.run()
+    app.run()
