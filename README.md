@@ -1,3 +1,7 @@
+## Example:
+![example](https://github.com/user-attachments/assets/8e7643da-d957-4db0-a097-a220290abe53)
+
+
 ## Technologies:
 
 - **[Textual](https://github.com/Textualize/textual)** - Framework for creating TUI (Text User Interfaces) with Python.
