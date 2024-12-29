@@ -34,27 +34,20 @@ def open_website(url: str):
 
 class PlutoniumGlobalArgsSection(Static):
     def compose(self) -> ComposeResult:
-        self.horizontal_box = BasePlutoniumLauncherHorizontalBox()
 
         options = [("example_one", 1), ("example_two", 2)]
 
         self.combo_box: Select[int] = Select(options, allow_blank=False)
 
-        self.game_args_label = BasePlutoniumLauncherLabel(label_text="Global Args:", label_height="auto")
-
         self.add_button = BasePlutoniumLauncherButton(button_text="+", button_width="auto")
 
         self.remove_button = BasePlutoniumLauncherButton(button_text="-", button_width="auto")
 
-        with self.horizontal_box:
-            yield self.game_args_label
+        with BasePlutoniumLauncherHorizontalBox():
+            yield BasePlutoniumLauncherLabel(label_text="Global Args:", label_height="auto")
             yield self.combo_box
             yield self.remove_button
             yield self.add_button
-        yield self.horizontal_box
-
-    def on_mount(self):
-        self.game_args_label.styles.height = "auto"
 
 
 class PlutoniumGameSpecificArgsSection(Static):
@@ -95,11 +88,15 @@ class PlutoniumGameAutoExecuteBar(Static):
         self.horizontal_box = BasePlutoniumLauncherHorizontalBox(width="100%")
         with self.horizontal_box:
             self.auto_execute_label = BasePlutoniumLauncherLabel(
-                "Auto Run Game:", label_content_align=("center", "middle")
+                "Auto Run Game:", 
+                label_content_align=("center", "middle"),
+                label_width="26%"
             )
             self.auto_execute_checkbox = Checkbox()
             self.auto_execute_delay_label = BasePlutoniumLauncherLabel(
-                "Delay in Seconds:", label_content_align=("center", "middle")
+                "Delay in Seconds:", 
+                label_content_align=("center", "middle"),
+                label_width="31%"
             )
             self.auto_execute_delay_spin_box = SpinBox(iter_val=list(generate_spinbox_numbers()), init_val=1.0)
             yield self.auto_execute_label
@@ -110,8 +107,6 @@ class PlutoniumGameAutoExecuteBar(Static):
     def on_mount(self):
         self.auto_execute_delay_spin_box.styles.width = "33%"
         self.auto_execute_checkbox.styles.width = "10%"
-        self.auto_execute_label.styles.width = "26%"
-        self.auto_execute_delay_label.styles.width = "31%"
         self.auto_execute_checkbox.styles.content_align = ("center", "middle")
 
 
@@ -241,12 +236,12 @@ class GameDirectoryButton(Static):
 
 class RunGameButton(Static):
     def compose(self) -> ComposeResult:
-        self.button = BasePlutoniumLauncherButton(button_text="Run Game", button_width="100%")
+        self.button = BasePlutoniumLauncherButton(button_text='Run Game', button_width='100%')
         yield self.button
 
     def on_button_pressed(self) -> None:
-        print_to_log_window(SETTINGS["global"]["auto_run_game"])
-        print_to_log_window("Run Game")
+        print_to_log_window(SETTINGS['global']['auto_run_game'])
+        print_to_log_window('Run Game')
 
     def mount(self, *widgets, before=None, after=None):
         self.styles.width = "33%"
@@ -255,14 +250,10 @@ class RunGameButton(Static):
 
 class PlutoniumGameBar(Static):
     def compose(self) -> ComposeResult:
-        self.horizontal_box = BasePlutoniumLauncherHorizontalBox()
-        with self.horizontal_box:
-            self.app_data_button = AppDataButton()
-            self.game_dir_button = GameDirectoryButton()
-            self.run_game_button = RunGameButton()
-            yield self.app_data_button
-            yield self.game_dir_button
-            yield self.run_game_button
+        with BasePlutoniumLauncherHorizontalBox():
+            yield AppDataButton()
+            yield GameDirectoryButton()
+            yield RunGameButton()
 
 
 class DocsButton(Static):
@@ -312,12 +303,7 @@ class GithubButton(Static):
 
 class PlutoniumWebsiteBar(Static):
     def compose(self) -> ComposeResult:
-        self.horizontal_box = BasePlutoniumLauncherHorizontalBox(padding=(0))
-        self.docs_button = DocsButton()
-        self.github_button = GithubButton()
-        self.forums_button = ForumsButton()
-        with self.horizontal_box:
-            yield self.docs_button
-            yield self.forums_button
-            yield self.github_button
-        yield self.horizontal_box
+        with BasePlutoniumLauncherHorizontalBox(padding=(0)):
+            yield DocsButton()
+            yield GithubButton()
+            yield ForumsButton()

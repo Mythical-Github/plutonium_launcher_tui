@@ -17,6 +17,10 @@ class PlutoniumLauncherLog(Static):
         return super().mount(*widgets, before=before, after=after)
 
 
+    def print_to_log_window(message: str):
+        plutonium_logger.rich_log.write(message)
+
+
 plutonium_logger = PlutoniumLauncherLog()
 
 
