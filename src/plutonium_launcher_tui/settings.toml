@@ -1,0 +1,34 @@
+[global]
+args = ["--global-setting example1", "--global-setting example2"]
+usernames = ["Default", "Default Two", "Default Three"]
+last_selected_usernames = ["Default"]
+last_selected_game = "Call of Duty World at War"
+auto_run_game = true
+auto_run_game_delay = 5
+
+[theme]
+window_position = { x = 100, y = 100 }
+window_length = 800
+window_height = 600
+textual_theme = "dracula" 
+
+[games]
+[games.call_of_duty_world_at_war]
+game_directory = "D:/SteamLibrary/steamapps/common/Call of Duty World at War"
+args = ["--fullscreen", "--difficulty hard"]
+last_selected_game_mode = "Multiplayer"
+
+[games.call_of_duty_modern_warfare_iii]
+game_directory = "D:/SteamLibrary/steamapps/common/Call of Duty Modern Warfare 3"
+args = ["--debug", "--low-res"]
+last_selected_game_mode = "Multiplayer"
+
+[games.call_of_duty_black_ops_i]
+game_directory = "D:/SteamLibrary/steamapps/common/Call of Duty Black Ops"
+args = ["--coop", "--map desert"]
+last_selected_game_mode = "Multiplayer"
+
+[games.call_of_duty_black_ops_ii]
+game_directory = "D:/SteamLibrary/steamapps/common/Call of Duty Black Ops II"
+args = ["--vr", "--haptics"]
+last_selected_game_mode = "Multiplayer"

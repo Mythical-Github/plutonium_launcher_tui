@@ -4,6 +4,7 @@
 # - pyjson5
 # - textual
 # - textual-spinbox@ git+https://github.com/friscorose/textual-spinbox
+# - tomlkit
 #
 
 linkify-it-py==2.0.3
@@ -30,6 +31,8 @@ textual==1.0.0
     #   hatch.envs.default
     #   textual-spinbox
 textual-spinbox @ git+https://github.com/friscorose/textual-spinbox@27f898cfd595cc7406a7889f2cfde769e9adcecd
+    # via hatch.envs.default
+tomlkit==0.13.2
     # via hatch.envs.default
 typing-extensions==4.12.2
     # via textual

@@ -1,12 +1,47 @@
+import os
 import sys
+import webbrowser
+from pathlib import Path
 
+import tomlkit
+from textual_spinbox import SpinBox
 from textual.app import App, ComposeResult
 from textual.containers import Vertical, VerticalScroll
-from textual.widgets import TextArea, Static, Checkbox, Select, Header
-from textual_spinbox import SpinBox
-import webbrowser
+from textual.widgets import (
+    TextArea, 
+    Static, 
+    Checkbox, 
+    Select, 
+    Header, 
+    Button
+)
 
-from plutonium_launcher_tui.base_widgets import *
+from plutonium_launcher_tui.customization import set_theme, set_window_title
+from plutonium_launcher_tui.logger import print_to_log_window, plutonium_logger
+from plutonium_launcher_tui.base_widgets import (
+    BasePlutoniumLauncherButton, 
+    BasePlutoniumLauncherHorizontalBox, 
+    BasePlutoniumLauncherLabel
+)
+
+
+if getattr(sys, 'frozen', False):
+    SCRIPT_DIR = Path(sys.executable).parent
+else:
+    SCRIPT_DIR = Path(__file__).resolve().parent
+
+SETTINGS_TOML = os.path.normpath(f'{SCRIPT_DIR}/settings.toml')
+
+if not os.path.isfile(SETTINGS_TOML):
+    raise FileNotFoundError(f'The following file was not found: "{SETTINGS_TOML}"')
+
+with open(SETTINGS_TOML, 'r') as f:
+    SETTINGS = tomlkit.load(f)
+
+
+def save_settings():
+    with open(SETTINGS_TOML, 'w') as fp:
+        tomlkit.dump(SETTINGS, fp)
 
 
 class PlutoniumGlobalArgsSection(Static):
@@ -127,7 +162,7 @@ class PlutoniumGameDirectoryBar(Static):
             self.game_dir_label = BasePlutoniumLauncherLabel('Game Directory:')
             self.game_dir_text_area = TextArea('path/to/your/game/dir')
             self.select_dir_button = BasePlutoniumLauncherButton(
-                button_text='..', 
+                button_text='··', 
                 button_width=6, 
                 button_border=('none', 'black')
             )
@@ -137,7 +172,7 @@ class PlutoniumGameDirectoryBar(Static):
 
 
     def on_mount(self):
-        self.game_dir_text_area.styles.height = 'auto'
+        self.game_dir_text_area.styles.height = '3'
         self.select_dir_button.styles.text_align = 'center'
         self.select_dir_button.styles.align = ('center', 'middle')
         self.select_dir_button.styles.content_align = ('center', 'middle')
@@ -150,8 +185,8 @@ class PlutoniumGameModeSelector(Static):
         self.game_mode_label = BasePlutoniumLauncherLabel('Game Mode:')
 
         options = [
-            ("Single Player", 1), 
-            ("Multiplayer", 2)
+            ('Single Player', 1), 
+            ('Multiplayer', 2)
         ]
 
         self.my_select: Select[int] = Select(options, allow_blank=False)
@@ -161,8 +196,8 @@ class PlutoniumGameModeSelector(Static):
 
 
     def on_mount(self):
-        self.my_select.styles.content_align = ("center", "middle")
-        self.my_select.styles.align = ("center", "middle")
+        self.my_select.styles.content_align = ('center', 'middle')
+        self.my_select.styles.align = ('center', 'middle')
         self.my_select.styles.height = 'auto'
 
 
@@ -172,10 +207,10 @@ class PlutoniumGameSelector(Static):
         self.game_mode_label = BasePlutoniumLauncherLabel('Game:')
 
         options = [
-            ("Call of Duty World at War", 1), 
-            ("Call of Duty Modern Warfare III", 2), 
-            ("Call of Duty Black Ops", 3), 
-            ("Call of Duty Black Ops II", 4)
+            ('Call of Duty World at War', 1), 
+            ('Call of Duty Modern Warfare III', 2), 
+            ('Call of Duty Black Ops', 3), 
+            ('Call of Duty Black Ops II', 4)
         ] 
 
         self.my_select: Select[int] = Select(options, allow_blank=False)
@@ -184,11 +219,9 @@ class PlutoniumGameSelector(Static):
             yield(self.my_select)
 
 
-    def on_mount(self):    
-        # self.horizontal_box.styles.padding = (1, 0, 0, 0)
-        # self.horizontal_box.styles.border = ('solid', 'grey')
-        self.my_select.styles.content_align = ("center", "middle")
-        self.my_select.styles.align = ("center", "middle")
+    def on_mount(self):
+        self.my_select.styles.content_align = ('center', 'middle')
+        self.my_select.styles.align = ('center', 'middle')
         self.my_select.styles.height = 'auto'
 
 
@@ -209,7 +242,6 @@ class PlutoniumUserBar(Static):
     def compose(self) -> ComposeResult:
         self.horizontal_box = BasePlutoniumLauncherHorizontalBox(padding=(1, 0, 0, 0), width='100%')
         self.user_label = BasePlutoniumLauncherLabel(label_text='User:', label_height='auto')
-        # self.user_text_area = TextArea('Default Username')]
         options = [
             ('default', 0),
             ('default_two', 1)
@@ -220,16 +252,12 @@ class PlutoniumUserBar(Static):
         with self.horizontal_box:
             yield self.user_label
             yield self.usernames_combo_box
-            # yield self.user_text_area
             yield self.remove_button
             yield self.add_button
         yield self.horizontal_box
     
 
     def on_mount(self):
-        # self.user_text_area.styles.height = '100%'
-        # self.user_text_area.styles.content_align = ('center', 'middle')
-        # self.user_text_area.styles.width = 'auto'
         self.add_button.styles.height = '100%'
         self.remove_button.styles.height = '100%'
         self.add_button.styles.text_align = ('center')
@@ -270,6 +298,7 @@ class RunGameButton(Static):
         yield self.button
     
     def on_button_pressed(self, event: Button.Pressed) -> None:
+        print_to_log_window(SETTINGS['global']['auto_run_game'])
         print_to_log_window(f'Run Game')
 
     def mount(self, *widgets, before = None, after = None):
@@ -282,7 +311,7 @@ def open_directory_in_file_browser(directory_path: str):
         os.startfile(directory_path)
         print_to_log_window(f'Opening the following directory in the file browser: "{directory_path}"')
     else:
-        print_to_log_window(f"The specified path is not a directory: {directory_path}")
+        print_to_log_window(f'The specified path is not a directory: "{directory_path}"')
 
 
 class PlutoniumGameBar(Static):
@@ -302,7 +331,7 @@ def open_website(url: str):
         webbrowser.open(url, new=2)
         return True
     except Exception as e:
-        print(f"An error occurred: {e}")
+        print(f'An error occurred: {e}')
         return False
 
 
@@ -336,7 +365,6 @@ class ForumsButton(Static):
         return super().mount(*widgets, before=before, after=after)
 
 
-
 class GithubButton(Static):
     def compose(self) -> ComposeResult:
         self.github_button = BasePlutoniumLauncherButton(button_text='Github', button_width='100%')
@@ -365,31 +393,10 @@ class PlutoniumWebsiteBar(Static):
         yield self.horizontal_box
 
 
-class PlutoniumLauncherLog(Static):
-    def compose(self):
-        self.rich_log = RichLog(wrap=True)
-        yield self.rich_log
-        return super().compose()
-    
-    def mount(self, *widgets, before = None, after = None):
-        self.rich_log.styles.height = '6'
-        self.rich_log.styles.margin = 1
-        self.rich_log.styles.border = ('solid', 'grey')
-        self.rich_log.border_title = 'Logging'
-        self.rich_log.styles.width = '100%'
-        return super().mount(*widgets, before=before, after=after)
-
-
-def print_to_log_window(message: str):
-    app.pluto_logger.rich_log.write(message)
-
-
 class PlutoniumLauncher(App):
     TITLE = 'Plutonium Launcher'
-    pluto_logger = PlutoniumLauncherLog()
     def compose(self) -> ComposeResult:
         self.main_vertical_scroll_box = VerticalScroll()
-        self.website_bar = PlutoniumWebsiteBar()
         with self.main_vertical_scroll_box:
             yield Header()
             yield PlutoniumGameSection()
@@ -398,8 +405,8 @@ class PlutoniumLauncher(App):
             yield PlutoniumGlobalArgsSection()
             yield PlutoniumGameAutoExecuteBar()
             yield PlutoniumGameBar()
-            yield self.website_bar
-            yield self.pluto_logger
+            yield PlutoniumWebsiteBar()
+            yield plutonium_logger
             
 
     def on_mount(self):
@@ -407,11 +414,10 @@ class PlutoniumLauncher(App):
         self.main_vertical_scroll_box.styles.padding = (0)
         self.main_vertical_scroll_box.styles.border = ('solid', 'grey')
 
-
+        set_theme(app_instance=self, theme_name='dracula')
+        
 app = PlutoniumLauncher()
 
-# sets window title
-sys.stdout.write(f'\033]0;{app.TITLE}\007')
-sys.stdout.flush()
+set_window_title(app.TITLE)
 
 app.run()
