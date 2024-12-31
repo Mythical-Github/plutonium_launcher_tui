@@ -294,9 +294,8 @@ class AppDataButton(Static):
         plutonium_appdata_folder = os.path.normpath(os.path.abspath(f'{os.getenv('APPDATA')}/../Local/Plutonium'))
         open_directory_in_file_browser(plutonium_appdata_folder)
 
-    def mount(self, *widgets, before=None, after=None):
+    def on_mount(self):
         self.styles.width = "33%"
-        return super().mount(*widgets, before=before, after=after)
 
 
 class GameDirectoryButton(Static):
@@ -307,9 +306,8 @@ class GameDirectoryButton(Static):
     def on_button_pressed(self) -> None:
         print_to_log_window("Game Directory")
 
-    def mount(self, *widgets, before=None, after=None):
+    def on_mount(self):
         self.styles.width = "33%"
-        return super().mount(*widgets, before=before, after=after)
 
 
 class RunGameButton(Static):
@@ -321,9 +319,8 @@ class RunGameButton(Static):
         print_to_log_window(SETTINGS['global']['auto_run_game'])
         print_to_log_window('Run Game')
 
-    def mount(self, *widgets, before=None, after=None):
+    def on_mount(self):
         self.styles.width = "33%"
-        return super().mount(*widgets, before=before, after=after)
 
 
 class PlutoniumGameBar(Static):
@@ -343,9 +340,8 @@ class DocsButton(Static):
         url = "https://plutonium.pw/docs/"
         open_website(url)
 
-    def mount(self, *widgets, before=None, after=None):
+    def on_mount(self):
         self.styles.width = "33%"
-        return super().mount(*widgets, before=before, after=after)
 
 
 class ForumsButton(Static):
@@ -357,9 +353,8 @@ class ForumsButton(Static):
         url = "https://forum.plutonium.pw/"
         open_website(url)
 
-    def mount(self, *widgets, before=None, after=None):
+    def on_mount(self):
         self.styles.width = "33%"
-        return super().mount(*widgets, before=before, after=after)
 
 
 class GithubButton(Static):
@@ -371,9 +366,8 @@ class GithubButton(Static):
         url = "https://github.com/Mythical-Github/plutonium_launcher_tui"
         open_website(url)
 
-    def mount(self, *widgets, before=None, after=None):
+    def on_mount(self):
         self.styles.width = "33%"
-        return super().mount(*widgets, before=before, after=after)
 
 
 class PlutoniumWebsiteBar(Static):
