@@ -3,6 +3,7 @@ from textual.containers import VerticalScroll
 from textual.widgets import Header
 
 from plutonium_launcher_tui.customization import set_theme, set_window_title, set_terminal_size
+from plutonium_launcher_tui.settings import get_current_selected_game
 from plutonium_launcher_tui.logger import plutonium_logger
 from plutonium_launcher_tui.plutonium_launcher_widgets import (
     PlutoniumGameAutoExecuteBar,
@@ -11,7 +12,7 @@ from plutonium_launcher_tui.plutonium_launcher_widgets import (
     PlutoniumGameSpecificArgsSection,
     PlutoniumGlobalArgsSection,
     PlutoniumUserBar,
-    PlutoniumWebsiteBar,
+    PlutoniumWebsiteBar
 )
 
 
@@ -20,9 +21,10 @@ class PlutoniumLauncher(App):
 
     def compose(self) -> ComposeResult:
         self.main_vertical_scroll_box = VerticalScroll()
+        self.plutonium_game_section = PlutoniumGameSection()
         with self.main_vertical_scroll_box:
             yield Header()
-            yield PlutoniumGameSection()
+            yield self.plutonium_game_section
             yield PlutoniumUserBar()
             yield PlutoniumGameSpecificArgsSection()
             yield PlutoniumGlobalArgsSection()
@@ -38,11 +40,18 @@ class PlutoniumLauncher(App):
         set_theme(app_instance=self, theme_name="dracula")
 
 
-def run_main_app():
-
+def configure_app():
     set_window_title(app.TITLE)
     
+    # 52x60 columns/rows in terminal
     set_terminal_size(app, 420, 680)
+
+    
+
+
+def run_main_app():
+
+    configure_app()
 
     app.run()
 

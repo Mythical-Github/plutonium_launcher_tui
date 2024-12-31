@@ -2,18 +2,30 @@ import os
 import subprocess
 import webbrowser
 
+from textual import on
 from textual.app import ComposeResult
 from textual.containers import Vertical
 from textual.widgets import Checkbox, Select, Static, TextArea
 from textual_spinbox import SpinBox
 
+from plutonium_launcher_tui import enums
 from plutonium_launcher_tui.base_widgets import (
     BasePlutoniumLauncherButton,
     BasePlutoniumLauncherHorizontalBox,
     BasePlutoniumLauncherLabel,
 )
 from plutonium_launcher_tui.logger import print_to_log_window
-from plutonium_launcher_tui.settings import SETTINGS
+from plutonium_launcher_tui.settings import (
+    SETTINGS, 
+    get_current_selected_game, 
+    get_auto_run_game, 
+    get_auto_run_game_delay, 
+    get_usernames, 
+    get_current_username,
+    set_current_selected_game,
+    get_currently_selected_game_mode,
+    set_currently_selected_game_mode
+)
 
 
 def open_directory_in_file_browser(directory_path: str):
@@ -26,6 +38,7 @@ def open_directory_in_file_browser(directory_path: str):
 
 
 def open_website(url: str):
+    print_to_log_window(f"Opening website url: {url}")
     try:
         webbrowser.open(url, new=2)
     except RuntimeError as error_message:
@@ -92,13 +105,13 @@ class PlutoniumGameAutoExecuteBar(Static):
                 label_content_align=("center", "middle"),
                 label_width="26%"
             )
-            self.auto_execute_checkbox = Checkbox()
+            self.auto_execute_checkbox = Checkbox(value=get_auto_run_game())
             self.auto_execute_delay_label = BasePlutoniumLauncherLabel(
                 "Delay in Seconds:", 
                 label_content_align=("center", "middle"),
                 label_width="31%"
             )
-            self.auto_execute_delay_spin_box = SpinBox(iter_val=list(generate_spinbox_numbers()), init_val=1.0)
+            self.auto_execute_delay_spin_box = SpinBox(iter_val=list(generate_spinbox_numbers()), init_val=get_auto_run_game_delay())
             yield self.auto_execute_label
             yield self.auto_execute_checkbox
             yield self.auto_execute_delay_label
@@ -136,17 +149,39 @@ class PlutoniumGameModeSelector(Static):
         self.horizontal_box = BasePlutoniumLauncherHorizontalBox()
         self.game_mode_label = BasePlutoniumLauncherLabel("Game Mode:")
 
-        options = [("Single Player", 1), ("Multiplayer", 2)]
+        # generate this from the enum later
+        self.options = [
+            ("Single Player", 0), 
+            ("Multiplayer", 1)
+        ]
 
-        self.my_select: Select[int] = Select(options, allow_blank=False)
+        main_value = None
+        current_game = get_currently_selected_game_mode().value
+
+        for entry in self.options:
+            if entry[0] == current_game:
+                main_value = entry[1]
+                break
+            else:
+                error_message = f'The currently selected game is invalid.'
+                RuntimeWarning(error_message)
+
+        self.my_select: Select[int] = Select(self.options, allow_blank=False, value=main_value)
         with self.horizontal_box:
             yield self.game_mode_label
-            yield (self.my_select)
+            yield self.my_select
+
+
+    @on(Select.Changed)
+    def select_changed(self, event: Select.Changed) -> None:
+        set_currently_selected_game_mode(enums.get_enum_from_val(enums.PlutoniumGameModes, self.options[event.value][0]))
+
 
     def on_mount(self):
         self.my_select.styles.content_align = ("center", "middle")
         self.my_select.styles.align = ("center", "middle")
         self.my_select.styles.height = "auto"
+        
 
 
 class PlutoniumGameSelector(Static):
@@ -154,17 +189,43 @@ class PlutoniumGameSelector(Static):
         self.horizontal_box = BasePlutoniumLauncherHorizontalBox()
         self.game_mode_label = BasePlutoniumLauncherLabel("Game:")
 
-        options = [
-            ("Call of Duty World at War", 1),
-            ("Call of Duty Modern Warfare III", 2),
-            ("Call of Duty Black Ops", 3),
-            ("Call of Duty Black Ops II", 4),
+        # create this from the enum later
+        self.options = [
+            ("Call of Duty World at War", 0),
+            ("Call of Duty Modern Warfare III", 1),
+            ("Call of Duty Black Ops I", 2),
+            ("Call of Duty Black Ops II", 3),
         ]
 
-        self.my_select: Select[int] = Select(options, allow_blank=False)
+        main_value = None
+        current_game = get_current_selected_game().value
+
+        for entry in self.options:
+            if entry[0] == current_game:
+                main_value = entry[1]
+                break
+            else:
+                error_message = f'The currently selected game is invalid.'
+                RuntimeWarning(error_message)
+
+        self.my_select: Select[int] = Select(self.options, allow_blank=False, value=main_value)
         with self.horizontal_box:
             yield self.game_mode_label
-            yield (self.my_select)
+            yield self.my_select
+
+
+    @on(Select.Changed)
+    def select_changed(self, event: Select.Changed) -> None:
+        set_current_selected_game(enums.get_enum_from_val(enums.PlutoniumGames, self.options[event.value][0]))
+        from plutonium_launcher_tui.main_app import app
+        # below comparison is borked somehow
+        if get_currently_selected_game_mode() == enums.PlutoniumGameModes.SINGLE_PLAYER:
+            main_value = 0
+        else:
+            main_value = 1
+        app.plutonium_game_section.game_mode_selector.my_select.value = main_value
+        print_to_log_window(f'Loaded settings for: {get_current_selected_game().value}')
+
 
     def on_mount(self):
         self.my_select.styles.content_align = ("center", "middle")
@@ -175,9 +236,11 @@ class PlutoniumGameSelector(Static):
 class PlutoniumGameSection(Static):
     def compose(self) -> ComposeResult:
         self.vertical_box = Vertical()
+        self.game_selector = PlutoniumGameSelector()
+        self.game_mode_selector = PlutoniumGameModeSelector()
         with self.vertical_box:
-            yield PlutoniumGameSelector()
-            yield PlutoniumGameModeSelector()
+            yield self.game_selector
+            yield self.game_mode_selector
             yield PlutoniumGameDirectoryBar()
 
     def on_mount(self):
@@ -188,8 +251,23 @@ class PlutoniumUserBar(Static):
     def compose(self) -> ComposeResult:
         self.horizontal_box = BasePlutoniumLauncherHorizontalBox(padding=(1, 0, 0, 0), width="100%")
         self.user_label = BasePlutoniumLauncherLabel(label_text="User:", label_height="auto")
-        options = [("default", 0), ("default_two", 1)]
-        self.usernames_combo_box: Select[int] = Select(options, allow_blank=False)
+        options = []
+        for index, username in enumerate(get_usernames()):
+            options.append((username, index))
+        
+        main_value = None
+        current_username = get_current_username()
+
+        for entry in options:
+            if entry[0] == current_username:
+                main_value = entry[1]
+                break
+            else:
+                error_message = f'The currently selected game is invalid.'
+                RuntimeWarning(error_message)
+
+
+        self.usernames_combo_box: Select[int] = Select(options=options, allow_blank=False, value=main_value)
         self.add_button = BasePlutoniumLauncherButton(button_text="+", button_width="auto")
         self.remove_button = BasePlutoniumLauncherButton(button_text="-", button_width="auto")
         with self.horizontal_box:
@@ -263,7 +341,6 @@ class DocsButton(Static):
 
     def on_button_pressed(self) -> None:
         url = "https://plutonium.pw/docs/"
-        print_to_log_window(f"Opening website url: {url}")
         open_website(url)
 
     def mount(self, *widgets, before=None, after=None):
@@ -278,7 +355,6 @@ class ForumsButton(Static):
 
     def on_button_pressed(self) -> None:
         url = "https://forum.plutonium.pw/"
-        print_to_log_window(f"Opening website url: {url}")
         open_website(url)
 
     def mount(self, *widgets, before=None, after=None):
@@ -293,7 +369,6 @@ class GithubButton(Static):
 
     def on_button_pressed(self) -> None:
         url = "https://github.com/Mythical-Github/plutonium_launcher_tui"
-        print_to_log_window(f"Opening website url: {url}")
         open_website(url)
 
     def mount(self, *widgets, before=None, after=None):

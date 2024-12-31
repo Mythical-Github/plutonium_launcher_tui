@@ -1,11 +1,9 @@
 import os
-# import sys
-# from shutil import get_terminal_size
+
 
 import pygetwindow
 from textual.app import App
 from textual.theme import ThemeProvider
-
 
 
 def set_theme(app_instance: App, theme_name: str):
