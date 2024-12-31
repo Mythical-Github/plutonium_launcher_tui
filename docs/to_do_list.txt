@@ -1,4 +1,5 @@
-ascii pluto icon
-check fill on ayuto exuec and delay in seconds to be more compact   '
-
-fill out card and send tonight in mail,
+auto exec delay text left align
+selay in seconds left align
+pluto staging toggle button
+clear log button
+pluto ascii art
