@@ -6,7 +6,6 @@ import tomlkit
 
 from plutonium_launcher_tui import enums
 
-
 SCRIPT_DIR = Path(sys.executable).parent if getattr(sys, "frozen", False) else Path(__file__).resolve().parent
 
 SETTINGS_TOML = os.path.normpath(f"{SCRIPT_DIR}/settings.toml")
@@ -29,79 +28,79 @@ def get_current_selected_game() -> enums.PlutoniumGames:
     global_settings = SETTINGS.get('global', {})
     last_selected_game = global_settings.get('last_selected_game')
 
-    if not last_selected_game in enums.PlutoniumGames._value2member_map_:
+    if last_selected_game not in enums.PlutoniumGames._value2member_map_:
         last_selected_game = enums.PlutoniumGames.CALL_OF_DUTY_WORLD_AT_WAR
         set_current_selected_game(last_selected_game)
-    
+
     return last_selected_game
 
 
 def set_current_selected_game(game: enums.PlutoniumGames):
     if 'global' not in SETTINGS:
         SETTINGS['global'] = {}
-    
+
     SETTINGS['global']['last_selected_game'] = game.value
-    
+
     save_settings()
 
 
 def get_auto_run_game():
     global_settings = SETTINGS.get('global', {})
     auto_run_game = global_settings.get('auto_run_game')
-    
+
     if not auto_run_game:
         auto_run_game = False
         set_auto_run_game(auto_run_game)
-    
+
     return auto_run_game
 
 
 def set_auto_run_game(auto_run_game: bool):
     if 'global' not in SETTINGS:
         SETTINGS['global'] = {}
-    
+
     SETTINGS['global']['auto_run_game'] = auto_run_game
-    
+
     save_settings()
 
 
 def get_auto_run_game_delay():
     global_settings = SETTINGS.get('global', {})
     delay_in_seconds = global_settings.get('auto_run_game_delay')
-    
+
     if not delay_in_seconds:
         delay_in_seconds = 1.0
         set_auto_run_game_delay(delay_in_seconds)
-    
+
     return delay_in_seconds
 
 
 def set_auto_run_game_delay(delay_in_seconds: float):
     if 'global' not in SETTINGS:
         SETTINGS['global'] = {}
-    
+
     SETTINGS['global']['auto_run_game_delay'] = delay_in_seconds
-    
+
     save_settings()
 
 
 def get_usernames() -> list[str]:
     global_settings = SETTINGS.get('global', {})
     usernames = global_settings.get('usernames', [])
-    
+
     if not usernames:
         usernames.append('default')
         set_usernames(usernames)
-    
+
     return usernames
 
 
 def set_usernames(usernames: list[str]):
     if 'global' not in SETTINGS:
         SETTINGS['global'] = {}
-    
+
     SETTINGS['global']['usernames'] = usernames
-    
+
     save_settings()
 
 
@@ -110,7 +109,7 @@ def get_current_username() -> str:
     username = global_settings.get('last_selected_username')
     if not username:
         set_username('default')
-    if not username in get_usernames():
+    if username not in get_usernames():
         username = get_usernames()[0]
         set_username(get_usernames()[0])
     return username
@@ -119,12 +118,12 @@ def get_current_username() -> str:
 def set_username(username: str):
     if 'global' not in SETTINGS:
         SETTINGS['global'] = {}
-    
-    if not username in get_usernames():
+
+    if username not in get_usernames():
         set_usernames(get_usernames().append(username))
 
     SETTINGS['global']['last_selected_username'] = username
-    
+
     save_settings()
 
 
@@ -160,7 +159,7 @@ def get_currently_selected_game_mode() -> enums.PlutoniumGameModes:
 
 
 def set_currently_selected_game_mode(game_mode: enums.PlutoniumGameModes):
-    
+
     if 'games' not in SETTINGS:
         SETTINGS['games'] = {}
 
@@ -168,6 +167,6 @@ def set_currently_selected_game_mode(game_mode: enums.PlutoniumGameModes):
         SETTINGS['games'][get_current_selected_game().value] = {}
 
     SETTINGS['games'][get_current_selected_game().value]['last_selected_game_mode'] = game_mode.value
-    
+
     save_settings()
 

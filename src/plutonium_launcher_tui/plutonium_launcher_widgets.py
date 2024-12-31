@@ -16,15 +16,15 @@ from plutonium_launcher_tui.base_widgets import (
 )
 from plutonium_launcher_tui.logger import print_to_log_window
 from plutonium_launcher_tui.settings import (
-    SETTINGS, 
-    get_current_selected_game, 
-    get_auto_run_game, 
-    get_auto_run_game_delay, 
-    get_usernames, 
+    SETTINGS,
+    get_auto_run_game,
+    get_auto_run_game_delay,
+    get_current_selected_game,
     get_current_username,
-    set_current_selected_game,
     get_currently_selected_game_mode,
-    set_currently_selected_game_mode
+    get_usernames,
+    set_current_selected_game,
+    set_currently_selected_game_mode,
 )
 
 
@@ -101,13 +101,13 @@ class PlutoniumGameAutoExecuteBar(Static):
         self.horizontal_box = BasePlutoniumLauncherHorizontalBox(width="100%")
         with self.horizontal_box:
             self.auto_execute_label = BasePlutoniumLauncherLabel(
-                "Auto Run Game:", 
+                "Auto Run Game:",
                 label_content_align=("center", "middle"),
                 label_width="26%"
             )
             self.auto_execute_checkbox = Checkbox(value=get_auto_run_game())
             self.auto_execute_delay_label = BasePlutoniumLauncherLabel(
-                "Delay in Seconds:", 
+                "Delay in Seconds:",
                 label_content_align=("center", "middle"),
                 label_width="31%"
             )
@@ -151,7 +151,7 @@ class PlutoniumGameModeSelector(Static):
 
         # generate this from the enum later
         self.options = [
-            ("Single Player", 0), 
+            ("Single Player", 0),
             ("Multiplayer", 1)
         ]
 
@@ -163,7 +163,7 @@ class PlutoniumGameModeSelector(Static):
                 main_value = entry[1]
                 break
             else:
-                error_message = f'The currently selected game is invalid.'
+                error_message = 'The currently selected game is invalid.'
                 RuntimeWarning(error_message)
 
         self.my_select: Select[int] = Select(self.options, allow_blank=False, value=main_value)
@@ -181,7 +181,7 @@ class PlutoniumGameModeSelector(Static):
         self.my_select.styles.content_align = ("center", "middle")
         self.my_select.styles.align = ("center", "middle")
         self.my_select.styles.height = "auto"
-        
+
 
 
 class PlutoniumGameSelector(Static):
@@ -205,7 +205,7 @@ class PlutoniumGameSelector(Static):
                 main_value = entry[1]
                 break
             else:
-                error_message = f'The currently selected game is invalid.'
+                error_message = 'The currently selected game is invalid.'
                 RuntimeWarning(error_message)
 
         self.my_select: Select[int] = Select(self.options, allow_blank=False, value=main_value)
@@ -254,7 +254,7 @@ class PlutoniumUserBar(Static):
         options = []
         for index, username in enumerate(get_usernames()):
             options.append((username, index))
-        
+
         main_value = None
         current_username = get_current_username()
 
@@ -263,7 +263,7 @@ class PlutoniumUserBar(Static):
                 main_value = entry[1]
                 break
             else:
-                error_message = f'The currently selected game is invalid.'
+                error_message = 'The currently selected game is invalid.'
                 RuntimeWarning(error_message)
 
 
