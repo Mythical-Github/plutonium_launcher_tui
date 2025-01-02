@@ -96,31 +96,44 @@ def generate_spinbox_numbers():
         current += 0.1
 
 
+def get_is_using_staging() -> bool:
+    return
+
+
 class PlutoniumGameAutoExecuteBar(Static):
     def compose(self) -> ComposeResult:
         self.horizontal_box = BasePlutoniumLauncherHorizontalBox(width="100%")
         with self.horizontal_box:
             self.auto_execute_label = BasePlutoniumLauncherLabel(
                 "Auto Run Game:",
-                label_content_align=("center", "middle"),
-                label_width="26%"
+                label_content_align=("left", "middle"),
+                label_width="auto"
             )
             self.auto_execute_checkbox = Checkbox(value=get_auto_run_game())
             self.auto_execute_delay_label = BasePlutoniumLauncherLabel(
-                "Delay in Seconds:",
-                label_content_align=("center", "middle"),
-                label_width="31%"
+                "Delay:",
+                label_content_align=("left", "middle"),
+                label_width="auto"
             )
             self.auto_execute_delay_spin_box = SpinBox(iter_val=list(generate_spinbox_numbers()), init_val=get_auto_run_game_delay())
+            self.staging_label = BasePlutoniumLauncherLabel(
+                "Use Staging:",
+                label_content_align=("left", "middle"),
+                label_width="auto"
+            )
+            self.staging_checkbox = Checkbox(value=get_is_using_staging())
+            yield self.staging_label
+            yield self.staging_checkbox
             yield self.auto_execute_label
             yield self.auto_execute_checkbox
             yield self.auto_execute_delay_label
             yield self.auto_execute_delay_spin_box
 
     def on_mount(self):
-        self.auto_execute_delay_spin_box.styles.width = "33%"
-        self.auto_execute_checkbox.styles.width = "10%"
+        self.auto_execute_delay_spin_box.styles.width = "1fr"
+        self.auto_execute_checkbox.styles.width = 'auto'
         self.auto_execute_checkbox.styles.content_align = ("center", "middle")
+        self.staging_checkbox.styles.width = 'auto'
 
 
 class PlutoniumGameDirectoryBar(Static):
@@ -247,18 +260,61 @@ class PlutoniumGameSection(Static):
         self.vertical_box.styles.height = "auto"
 
 
+class AddUserButton(Static):
+    def compose(self) -> ComposeResult:
+        self.add_button = BasePlutoniumLauncherButton(button_text="+", button_width="auto")
+        yield self.add_button
+
+    def on_mount(self):
+        self.styles.width = 'auto'
+        self.styles.height = 'auto'
+        self.add_button.styles.height = "auto"
+        self.add_button.styles.text_align = "center"
+        self.add_button.styles.align = ("center", "middle")
+        self.add_button.styles.content_align = ("center", "middle")
+
+    def on_button_pressed(self) -> None:
+        from plutonium_launcher_tui.main_app import app
+        app.push_screen(app.screen_zero)
+
+
+class RemoveUserButton(Static):
+    def compose(self) -> ComposeResult:
+        self.add_button = BasePlutoniumLauncherButton(button_text="-", button_width="auto")
+        yield self.add_button
+
+    def on_mount(self):
+        self.styles.width = 'auto'
+        self.styles.height = 'auto'
+        self.add_button.styles.height = "auto"
+        self.add_button.styles.text_align = "center"
+        self.add_button.styles.align = ("center", "middle")
+        self.add_button.styles.content_align = ("center", "middle")
+
+    def on_button_pressed(self) -> None:
+        from plutonium_launcher_tui.main_app import app
+        from plutonium_launcher_tui import logger
+        from plutonium_launcher_tui.settings import remove_username
+        
+        username = app.user_bar.options[app.user_bar.usernames_combo_box.value][0]
+
+        logger.print_to_log_window(f'Attempting to remove the following username: "{username}"')
+        remove_username(username)
+        app.user_bar.refresh(recompose=True)
+
+
 class PlutoniumUserBar(Static):
     def compose(self) -> ComposeResult:
         self.horizontal_box = BasePlutoniumLauncherHorizontalBox(padding=(1, 0, 0, 0), width="100%")
         self.user_label = BasePlutoniumLauncherLabel(label_text="User:", label_height="auto")
-        options = []
+        self.options = []
         for index, username in enumerate(get_usernames()):
-            options.append((username, index))
+            self.options.append((username, index))
 
         main_value = None
         current_username = get_current_username()
 
-        for entry in options:
+        for entry in self.options:
             if entry[0] == current_username:
                 main_value = entry[1]
                 break
@@ -267,9 +323,9 @@ class PlutoniumUserBar(Static):
                 RuntimeWarning(error_message)
 
 
-        self.usernames_combo_box: Select[int] = Select(options=options, allow_blank=False, value=main_value)
-        self.add_button = BasePlutoniumLauncherButton(button_text="+", button_width="auto")
-        self.remove_button = BasePlutoniumLauncherButton(button_text="-", button_width="auto")
+        self.usernames_combo_box: Select[int] = Select(options=self.options, allow_blank=False, value=main_value)
+        self.add_button = AddUserButton()
+        self.remove_button = RemoveUserButton()
         with self.horizontal_box:
             yield self.user_label
             yield self.usernames_combo_box
@@ -280,14 +336,11 @@ class PlutoniumUserBar(Static):
     def on_mount(self):
         self.add_button.styles.height = "100%"
         self.remove_button.styles.height = "100%"
-        self.add_button.styles.text_align = "center"
-        self.add_button.styles.align = ("center", "middle")
-        self.add_button.styles.content_align = ("center", "middle")
 
 
 class AppDataButton(Static):
     def compose(self) -> ComposeResult:
-        self.button = BasePlutoniumLauncherButton(button_text="AppData", button_width="100%")
+        self.button = BasePlutoniumLauncherButton(button_text="AppData Directory", button_width="100%")
         yield self.button
 
     def on_button_pressed(self) -> None:
@@ -316,7 +369,6 @@ class RunGameButton(Static):
         yield self.button
 
     def on_button_pressed(self) -> None:
-        print_to_log_window(SETTINGS['global']['auto_run_game'])
         print_to_log_window('Run Game')
 
     def on_mount(self):

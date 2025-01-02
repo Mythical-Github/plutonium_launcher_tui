@@ -6,14 +6,14 @@ import tomlkit
 
 from plutonium_launcher_tui import enums
 
+
 SCRIPT_DIR = Path(sys.executable).parent if getattr(sys, "frozen", False) else Path(__file__).resolve().parent
 
 SETTINGS_TOML = os.path.normpath(f"{SCRIPT_DIR}/settings.toml")
 
-
 if not os.path.isfile(SETTINGS_TOML):
-    error_message = f'The following file was not found: "{SETTINGS_TOML}"'
-    raise FileNotFoundError(error_message)
+    with open(SETTINGS_TOML, 'w') as file:
+        file.write('')
 
 with open(SETTINGS_TOML) as f:
     SETTINGS = tomlkit.load(f)
@@ -88,8 +88,11 @@ def get_usernames() -> list[str]:
     global_settings = SETTINGS.get('global', {})
     usernames = global_settings.get('usernames', [])
 
+    if not isinstance(usernames, list):
+        usernames = []
+
     if not usernames:
-        usernames.append('default')
+        usernames = ['default']
         set_usernames(usernames)
 
     return usernames
@@ -99,7 +102,12 @@ def set_usernames(usernames: list[str]):
     if 'global' not in SETTINGS:
         SETTINGS['global'] = {}
 
-    SETTINGS['global']['usernames'] = usernames
+    global_settings = SETTINGS['global']
+    
+    if 'usernames' not in global_settings:
+        global_settings['usernames'] = []
+
+    global_settings['usernames'] = usernames
 
     save_settings()
 
@@ -107,11 +115,15 @@ def set_usernames(usernames: list[str]):
 def get_current_username() -> str:
     global_settings = SETTINGS.get('global', {})
     username = global_settings.get('last_selected_username')
+
     if not username:
-        set_username('default')
+        username = 'default'
+        set_username(username)
+
     if username not in get_usernames():
         username = get_usernames()[0]
-        set_username(get_usernames()[0])
+        set_username(username)
+
     return username
 
 
@@ -120,16 +132,39 @@ def set_username(username: str):
         SETTINGS['global'] = {}
 
     if username not in get_usernames():
-        set_usernames(get_usernames().append(username))
+        current_usernames = get_usernames()
+        current_usernames.append(username)
+        set_usernames(current_usernames)
 
     SETTINGS['global']['last_selected_username'] = username
 
     save_settings()
 
 
+def remove_username(username: str):
+    usernames = get_usernames()
+    if len(usernames) <= 1:
+        from plutonium_launcher_tui.logger import print_to_log_window
+        print_to_log_window(f'Username removal failed, you cannot remove a username when you only have one username')
+        return
+
+    if username in usernames:
+        usernames.remove(username)
+        set_usernames(usernames)
+
+        current_username = get_current_username()
+        if current_username == username:
+            set_username(usernames[0])
+
+        save_settings()
+        from plutonium_launcher_tui.logger import print_to_log_window
+        print_to_log_window(f'Username removal of username "{username}" successful')
+
+
 def get_currently_selected_game_mode() -> enums.PlutoniumGameModes:
     current_game_enum = get_current_selected_game()
     current_game_string = current_game_enum.value
+
 
     if 'games' not in SETTINGS:
         SETTINGS['games'] = {}
@@ -170,3 +205,110 @@ def set_currently_selected_game_mode(game_mode: enums.PlutoniumGameModes):
 
     save_settings()
 
+
+def get_global_args() -> list[str]:
+    return SETTINGS.get('game', 'global_args', default=[])
+
+
+def set_global_args(args: list[str]):
+    if 'games' not in SETTINGS:
+        SETTINGS['games'] = {}
+
+    if 'global_args' not in SETTINGS['games']:
+        SETTINGS['games']['global_args'] = []
+    
+    SETTINGS['games']['global_args'].clear()
+    SETTINGS['games']['global_args'].extend(args)
+
+    save_settings()
+
+
+def add_global_arg(arg: str):
+    if 'games' not in SETTINGS:
+        SETTINGS['games'] = {}
+
+    global_args = get_global_args()
+
+    global_args.append(arg)
+
+    SETTINGS['games']['global_args'] = global_args
+
+    save_settings()
+
+
+def remove_global_arg(arg: str):
+    if 'games' not in SETTINGS:
+        SETTINGS['games'] = {}
+
+    global_args = get_global_args()
+
+    if arg in global_args:
+        global_args.remove(arg)
+
+    SETTINGS['games']['global_args'] = global_args
+
+    save_settings()
+
+
+def get_use_staging():
+    global_settings = SETTINGS.get('global', {})
+    use_staging = global_settings.get('use_staging')
+
+    if not use_staging:
+        use_staging = False
+        set_use_staging(use_staging)
+
+    return use_staging
+
+
+def set_use_staging(use_staging: bool):
+    if 'global' not in SETTINGS:
+        SETTINGS['global'] = {}
+
+    SETTINGS['global']['use_staging'] = use_staging
+
+    save_settings()
+
+
+def get_current_preferred_theme() -> str:
+    global_settings = SETTINGS.get('global', {})
+    theme = global_settings.get('theme')
+
+    if not theme:
+        theme = 'dracula'
+        set_current_preferred_theme(theme)
+
+    return theme
+
+
+def set_current_preferred_theme(theme: str):
+    if 'global' not in SETTINGS:
+        SETTINGS['global'] = {}
+
+    SETTINGS['global']['theme'] = theme
+
+    save_settings()
+
+
+def get_game_directory():
+    return
+
+
+def set_game_directory():
+    return
+
+
+def get_game_specific_args():
+    return
+
+
+def set_game_specific_args():
+    return
+
+
+def add_game_specific_arg():
+    return
+
+
+def remove_game_specific_arg():
+    return

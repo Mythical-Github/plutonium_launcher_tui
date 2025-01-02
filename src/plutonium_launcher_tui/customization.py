@@ -22,6 +22,7 @@ def set_theme(app_instance: App, theme_name: str):
 def set_terminal_size(app: App, x: int, y: int):
     all_windows = pygetwindow.getAllWindows()
 
+    # make this an equality check and not a substring check later
     windows = [win for win in all_windows if app.TITLE in win.title]
 
     for window in windows:

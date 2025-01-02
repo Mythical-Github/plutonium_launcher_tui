@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['src\\plutonium_launcher_tui\\__main__.pyw'],
+    ['src\\plutonium_launcher_tui\\__main__.py'],
     pathex=[],
     binaries=[],
     datas=[],
