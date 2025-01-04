@@ -1,30 +1,27 @@
 
-game specific args
-global args
-game directory
-file tree navigator for directory selection
+
+game directory section
+run game
+
+
+delay stuff
+auto run game logic
 
 
 later:
+    Update/Install functionality:
+        staging url:
+            https://cdn.plutonium.pw/updater/staging/info.json
+        normal url:
+            https://cdn.plutoniummod.com/updater/prod/info.json
+        update button, that opens up alternate screen with options to use https://github.com/mxve/plutonium-updater.rs, or button just updates, check about staging
     
-    make enter bindings for text inputs be confirm, maybe also backspace cancel bindings, maybe also escape to pop the screen/clean
-    staging url:
-        https://cdn.plutonium.pw/updater/staging/info.json
-    normal url:
-        https://cdn.plutoniummod.com/updater/prod/info.json
-    update button, that opens up alternate screen with options to use https://github.com/mxve/plutonium-updater.rs, or button just updates, check about staging
     set terminal font size (8)
     auto hide default scroll bar in terminal
     pluto ascii art
-    pluto staging button
     current players in game, similar to their discord command for it
     remember selected user theme preference
     remember user specified window position
     remember user specified monitor index
     log text doesn't always wrap
-    remove extra padding below log
-    run game
-    auto run game
-    delay
-    mw3 only supports mp right now, don't allow other game mode selection
-    
+    improve print outs for various interactions

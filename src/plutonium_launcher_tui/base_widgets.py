@@ -6,10 +6,10 @@ class BasePlutoniumLauncherButton(Button):
     def __init__(
         self,
         button_text: str = "default_text",
-        button_width: str = "33%",
+        button_width: str = "auto",
         button_margin: int = 0,
-        button_min_width: int = 0,
-        button_min_height: int = 0,
+        button_min_width: int = 1,
+        button_min_height: int = 1,
         button_border: str = "none",
         button_padding: int = 0,
     ):
@@ -41,10 +41,10 @@ class BasePlutoniumLauncherLabel(Label):
         label_margin: tuple = (0, 0, 0, 0),
         label_height: any = "auto",
         label_min_height: any = 1,
-        label_max_height: any = "100",
+        label_max_height: any = "100%",
         label_width: any = "auto",
         label_min_width: any = 1,
-        label_max_width: any = "100",
+        label_max_width: any = "100%",
         label_content_align: list = ("center", "middle"),
     ):
         super().__init__(label_text)
@@ -81,6 +81,7 @@ class BasePlutoniumLauncherHorizontalBox(Horizontal):
         border: tuple = ("none", "black"),
         height: str = "auto",
         width: str = "100%",
+        max_width: str = '100%'
     ):
         super().__init__()
         self.content_align = content_align
@@ -89,6 +90,7 @@ class BasePlutoniumLauncherHorizontalBox(Horizontal):
         self.border = border
         self.height = height
         self.width = width
+        self.max_width = max_width
 
     def on_mount(self):
         self.styles.content_align = self.content_align
@@ -97,3 +99,4 @@ class BasePlutoniumLauncherHorizontalBox(Horizontal):
         self.styles.border = self.border
         self.styles.height = self.height
         self.styles.width = self.width
+        self.styles.max_width = self.max_width

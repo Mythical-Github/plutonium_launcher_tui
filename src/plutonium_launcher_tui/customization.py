@@ -33,15 +33,14 @@ def set_terminal_size(app: App, x: int, y: int):
             print(f"Failed to resize window {window.title}: {e}")
 
 
-def set_terminal_font_size(font_size: int):
-    return
-
-
 def set_window_title(window_title: str):
     os.system(f'title {window_title}')
-
 
 
 # def set_window_title(window_title: str):
 #     sys.stdout.write(f"\033]0;{window_title}\007")
 #     sys.stdout.flush()
+
+
+# def set_terminal_font_size(font_size: int):
+#     return

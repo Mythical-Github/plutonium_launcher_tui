@@ -6,7 +6,6 @@ import tomlkit
 
 from plutonium_launcher_tui import enums
 
-
 SCRIPT_DIR = Path(sys.executable).parent if getattr(sys, "frozen", False) else Path(__file__).resolve().parent
 
 SETTINGS_TOML = os.path.normpath(f"{SCRIPT_DIR}/settings.toml")
@@ -103,7 +102,7 @@ def set_usernames(usernames: list[str]):
         SETTINGS['global'] = {}
 
     global_settings = SETTINGS['global']
-    
+
     if 'usernames' not in global_settings:
         global_settings['usernames'] = []
 
@@ -145,7 +144,7 @@ def remove_username(username: str):
     usernames = get_usernames()
     if len(usernames) <= 1:
         from plutonium_launcher_tui.logger import print_to_log_window
-        print_to_log_window(f'Username removal failed, you cannot remove a username when you only have one username')
+        print_to_log_window('Username removal failed, you cannot remove a username when you only have one username')
         return
 
     if username in usernames:
@@ -189,6 +188,11 @@ def get_currently_selected_game_mode() -> enums.PlutoniumGameModes:
         game_specific_section['last_selected_game_mode'] = current_game_mode
         save_settings()
 
+    if current_game_enum == enums.PlutoniumGames.CALL_OF_DUTY_MODERN_WARFARE_III.value:
+        current_game_mode = enums.PlutoniumGameModes.MULTIPLAYER.value
+        game_specific_section['last_selected_game_mode'] = current_game_mode
+        save_settings()
+        
     return enums.PlutoniumGameModes(current_game_mode)
 
 
@@ -207,58 +211,66 @@ def set_currently_selected_game_mode(game_mode: enums.PlutoniumGameModes):
 
 
 def get_global_args() -> list[str]:
-    return SETTINGS.get('game', 'global_args', default=[])
+    if 'global' not in SETTINGS:
+        SETTINGS['global'] = {}
+
+    if 'global_args' not in SETTINGS['global']:
+        SETTINGS['global']['global_args'] = []
+
+    save_settings()
+
+    return SETTINGS['global']['global_args']
 
 
 def set_global_args(args: list[str]):
-    if 'games' not in SETTINGS:
-        SETTINGS['games'] = {}
+    if 'global' not in SETTINGS:
+        SETTINGS['global'] = {}
 
-    if 'global_args' not in SETTINGS['games']:
-        SETTINGS['games']['global_args'] = []
-    
-    SETTINGS['games']['global_args'].clear()
-    SETTINGS['games']['global_args'].extend(args)
+    if 'global_args' not in SETTINGS['global']:
+        SETTINGS['global']['global_args'] = []
+
+    SETTINGS['global']['global_args']= args
 
     save_settings()
 
 
 def add_global_arg(arg: str):
-    if 'games' not in SETTINGS:
-        SETTINGS['games'] = {}
+    if 'global' not in SETTINGS:
+        SETTINGS['global'] = {}
 
     global_args = get_global_args()
 
-    global_args.append(arg)
+    global_args.insert(0, arg)
 
-    SETTINGS['games']['global_args'] = global_args
+    set_global_args(global_args)
 
     save_settings()
 
 
 def remove_global_arg(arg: str):
-    if 'games' not in SETTINGS:
-        SETTINGS['games'] = {}
+    if 'global' not in SETTINGS:
+        SETTINGS['global'] = {}
 
     global_args = get_global_args()
 
     if arg in global_args:
         global_args.remove(arg)
 
-    SETTINGS['games']['global_args'] = global_args
+    SETTINGS['global']['global_args'] = global_args
 
     save_settings()
 
 
-def get_use_staging():
+def get_use_staging() -> bool:
     global_settings = SETTINGS.get('global', {})
-    use_staging = global_settings.get('use_staging')
 
-    if not use_staging:
+    if 'use_staging' not in global_settings:
         use_staging = False
         set_use_staging(use_staging)
+        return use_staging
 
-    return use_staging
+    use_staging = global_settings.get('use_staging')
+    return bool(use_staging)
 
 
 def set_use_staging(use_staging: bool):
@@ -290,25 +302,96 @@ def set_current_preferred_theme(theme: str):
     save_settings()
 
 
-def get_game_directory():
-    return
+def get_game_directory() -> str:
+    default_game_dir = ''
+    game_dir = default_game_dir
+
+    if 'games' not in SETTINGS:
+        SETTINGS['games'] = {}
+
+    selected_game = get_current_selected_game().value
+
+    if selected_game not in SETTINGS['games']:
+        SETTINGS['games'][selected_game] = {}
+        save_settings()
+
+    if 'game_directory' not in SETTINGS['games'][selected_game]:
+        game_dir = default_game_dir
+        SETTINGS['games'][selected_game]['game_directory'] = game_dir
+        save_settings()
+    else:
+        game_dir = SETTINGS['games'][selected_game]['game_directory']
+        if not os.path.isdir(game_dir) and not game_dir == default_game_dir:
+            from plutonium_launcher_tui.logger import print_to_log_window
+            print_message_one = f'The following stored game directory was invalid "{game_dir}"'
+            print_to_log_window(print_message_one)
+            print_message_two = f'Resetting the stored directory to default, please reselect the game directory'
+            print_to_log_window(print_message_two)
+            game_dir = default_game_dir
+            SETTINGS['games'][selected_game]['game_directory'] = game_dir
+            save_settings()
+
+    return game_dir
 
 
-def set_game_directory():
-    return
+def set_game_directory(game_directory: str):
+    if not os.path.isdir(game_directory):
+        error_message = f'The following directory you choose does not exist: "{game_directory}"'
+        raise NotADirectoryError(error_message)
+
+    if 'games' not in SETTINGS:
+        SETTINGS['games'] = {}
+
+    selected_game = get_current_selected_game().value
+
+    if selected_game not in SETTINGS['games']:
+        SETTINGS['games'][selected_game] = {}
+
+    SETTINGS['games'][selected_game]['game_directory'] = game_directory
+
+    save_settings()
 
 
-def get_game_specific_args():
-    return
+
+def get_game_specific_args() -> list[str]:
+    if 'games' not in SETTINGS:
+        SETTINGS['games'] = {}
+
+    selected_game = get_current_selected_game().value
+
+    if selected_game not in SETTINGS['games']:
+        SETTINGS['games'][selected_game] = {}
+
+    if 'game_args' not in SETTINGS['games'][selected_game]:
+        SETTINGS['games'][selected_game]['game_args'] = []
+
+    return SETTINGS['games'][selected_game]['game_args']
 
 
-def set_game_specific_args():
-    return
+def set_game_specific_args(game_args: list[str]):
+    if 'games' not in SETTINGS:
+        SETTINGS['games'] = {}
+
+    selected_game = get_current_selected_game().value
+
+    if selected_game not in SETTINGS['games']:
+        SETTINGS['games'][selected_game] = {}
+
+    SETTINGS['games'][selected_game]['game_args'] = game_args
+
+    save_settings()
 
 
-def add_game_specific_arg():
-    return
+def add_game_specific_arg(game_arg: str):
+    if game_arg.strip() == '':
+        error_message = 'Cannot add a blank argument to the game args'
+        raise RuntimeError(error_message)
+    game_args = get_game_specific_args()
+    game_args.append(game_arg)
+    set_game_specific_args(game_args)
 
 
-def remove_game_specific_arg():
-    return
+def remove_game_specific_arg(game_arg: str):
+    game_args = get_game_specific_args()
+    game_args.remove(game_arg)
+    set_game_specific_args(game_args)

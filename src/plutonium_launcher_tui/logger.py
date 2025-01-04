@@ -7,11 +7,14 @@ class PlutoniumLauncherLog(Static):
         yield self.rich_log
 
     def on_mount(self):
-        self.rich_log.styles.margin = 1
+        self.rich_log.styles.margin = (1, 0, 0, 0)
         self.rich_log.styles.border = ("solid", "grey")
         self.rich_log.border_title = "Logging"
         self.rich_log.styles.width = "100%"
         self.rich_log.styles.scrollbar_size_horizontal = 0
+        self.styles.height = "1fr"
+        self.styles.min_height = 6
+        self.styles.width = '100%'
 
 
 plutonium_logger = PlutoniumLauncherLog()

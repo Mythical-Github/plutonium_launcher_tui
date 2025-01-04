@@ -1,18 +1,22 @@
 [global]
-usernames = ["default"]
-last_selected_username = "default"
-auto_run_game = false
-auto_run_game_delay = 1.0
+usernames = ["Mythical"]
+last_selected_username = "Mythical"
+global_args = ["ayprer","ayo"]
 last_selected_game = "Call of Duty World at War"
+auto_run_game_delay = 1.0
+use_staging = false
+auto_run_game = false
+theme = "dracula"
 
 [games."Call of Duty World at War"]
+game_args = ["ayo"]
 last_selected_game_mode = "Single Player"
-
-[games."Call of Duty Black Ops I"]
-last_selected_game_mode = "Single Player"
-
-[games."Call of Duty Black Ops II"]
-last_selected_game_mode = "Multiplayer"
+game_directory = ""
 
 [games."Call of Duty Modern Warfare III"]
 last_selected_game_mode = "Multiplayer"
+
+[games."Call of Duty Black Ops I"]
+last_selected_game_mode = "Single Player"
+game_args = []
+game_directory = ""
