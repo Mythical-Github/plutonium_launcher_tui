@@ -3,32 +3,36 @@ from textual.containers import VerticalScroll
 from textual.widgets import Header
 
 from plutonium_launcher_tui import logger
-from plutonium_launcher_tui.game_runner import run_game
-from plutonium_launcher_tui.customization import set_terminal_size, set_theme, set_window_title
+from plutonium_launcher_tui.customization import (
+    set_terminal_size, 
+    set_window_title
+)
+from plutonium_launcher_tui.screens import (
+    usernames_screen, 
+    game_args_screen,
+    game_directory_screen,
+    global_args_screen
+)
 from plutonium_launcher_tui.plutonium_launcher_widgets import (
-    GameArgsScreen,
-    GameDirectoryScreen,
-    GlobalArgsScreen,
     PlutoniumGameAutoExecuteBar,
     PlutoniumGameBar,
     PlutoniumGameSection,
     PlutoniumGameSpecificArgsSection,
     PlutoniumGlobalArgsSection,
     PlutoniumUserBar,
-    PlutoniumWebsiteBar,
-    UsernameScreen,
+    PlutoniumWebsiteBar
 )
-from plutonium_launcher_tui.settings import get_current_preferred_theme, get_auto_run_game, get_auto_run_game_delay
+from plutonium_launcher_tui.settings import get_current_preferred_theme
 
 
 class PlutoniumLauncher(App):
     TITLE = "Plutonium Launcher"
 
     def compose(self) -> ComposeResult:
-        self.username_screen = UsernameScreen()
-        self.game_directory_screen = GameDirectoryScreen()
-        self.game_args_screen = GameArgsScreen()
-        self.global_args_screen = GlobalArgsScreen()
+        self.username_screen = usernames_screen.UsernameScreen()
+        self.game_directory_screen = game_directory_screen.GameDirectoryScreen()
+        self.game_args_screen = game_args_screen.GameArgsScreen()
+        self.global_args_screen = global_args_screen.GlobalArgsScreen()
         self.main_vertical_scroll_box_zero = VerticalScroll()
         self.plutonium_game_section = PlutoniumGameSection()
         self.user_bar = PlutoniumUserBar()
@@ -53,7 +57,7 @@ class PlutoniumLauncher(App):
         self.main_vertical_scroll_box_zero.styles.margin = 0
         self.main_vertical_scroll_box_zero.styles.padding = 0
         self.main_vertical_scroll_box_zero.styles.border = ("solid", "grey")
-        set_theme(app_instance=self, theme_name=get_current_preferred_theme())
+        self.theme = get_current_preferred_theme()
 
 
 def configure_app():

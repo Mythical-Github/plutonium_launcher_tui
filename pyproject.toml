@@ -65,7 +65,7 @@ dependencies = [
 
 [tool.hatch.envs.build.scripts]
 exe = [
-  "pyinstaller --noconfirm --onefile --noconsole --name plutonium_launcher_tui --icon=assets/images/icons/project_main_icon.ico src/plutonium_launcher_tui/__main__.py"
+  "pyinstaller --noconfirm --onefile --console --name plutonium_launcher_tui --icon=assets/images/icons/project_main_icon.ico src/plutonium_launcher_tui/__main__.py"
 ]
 
 [tool.hatch.envs.scripts]

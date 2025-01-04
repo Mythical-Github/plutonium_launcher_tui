@@ -287,7 +287,7 @@ def get_current_preferred_theme() -> str:
     theme = global_settings.get('theme')
 
     if not theme:
-        theme = 'dracula'
+        theme = 'tokyo-night'
         set_current_preferred_theme(theme)
 
     return theme
@@ -395,3 +395,17 @@ def remove_game_specific_arg(game_arg: str):
     game_args = get_game_specific_args()
     game_args.remove(game_arg)
     set_game_specific_args(game_args)
+
+
+def get_game_mode_options():
+    one = [
+            ("Multiplayer", 0)
+        ]
+    two = [
+            ("Single Player", 0),
+            ("Multiplayer", 1)
+        ]
+    if get_current_selected_game() == enums.PlutoniumGames.CALL_OF_DUTY_MODERN_WARFARE_III.value:
+        return one
+    else:
+        return two

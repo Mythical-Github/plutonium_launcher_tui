@@ -1,5 +1,5 @@
 
-
+game args/username focus is off but not global args it seems
 game directory section
 run game
 
@@ -25,3 +25,4 @@ later:
     remember user specified monitor index
     log text doesn't always wrap
     improve print outs for various interactions
+    exe version
