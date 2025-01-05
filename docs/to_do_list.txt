@@ -1,4 +1,6 @@
 
+auto run game thread timer doesn't work just fires auto it seems right now
+
 changing delay value should also change the value in the ini
 when loading up the app it should load and set the value from the ini value
 
