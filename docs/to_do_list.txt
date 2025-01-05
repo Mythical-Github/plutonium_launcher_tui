@@ -1,23 +1,27 @@
-
-    improve print outs for various interactions
-    set terminal font size (8)
+To Do:
     remember selected user theme preference
+    improve print outs for various interactions
 
-later:
-    Maybe a close game/pluto instances button
+
+Later:
+    log text doesn't always wrap
+    test and make work on linux
+    mention it works best on windows terminal in readme
+
+
+If Possible:
+    set terminal font size (8)
+    auto hide default scroll bar in terminal
+    remember scrollbar placement for when the app is scrunched
+
+
+Maybes:
+    close game/pluto instances button
+    pluto ascii art
+    current players in game, similar to their discord command for it
     Update/Install functionality:
         staging url:
             https://cdn.plutonium.pw/updater/staging/info.json
         normal url:
             https://cdn.plutoniummod.com/updater/prod/info.json
         update button, that opens up alternate screen with options to use https://github.com/mxve/plutonium-updater.rs, or button just updates, check about staging
-    
-    auto hide default scroll bar in terminal
-    pluto ascii art
-    current players in game, similar to their discord command for it
-    remember user specified window position, seems windows just does this
-    remember user specified monitor index
-    log text doesn't always wrap
-    remember scrollbar placement for when the app is scrunched
-    test and make work on linux
-    mention it works best on windows terminal in readme
