@@ -2,7 +2,8 @@ import threading
 import time
 
 from plutonium_launcher_tui import game_runner
-from plutonium_launcher_tui.settings import get_auto_run_game_delay
+from plutonium_launcher_tui.settings import get_auto_run_game_delay, get_auto_run_game
+
 
 check_condition_thread = None
 stop_thread_event = threading.Event()
@@ -12,9 +13,12 @@ last_run_time = 0.0
 TOLERANCE = 0.1
 MAX_RUN_INTERVAL = 1.0
 
+
 def action_on_condition():
     print("Condition met! Performing action...")
-    game_runner.run_game()
+    if get_auto_run_game():
+
+        game_runner.run_game()
 
 def periodic_check():
     global time_passed, last_run_time
@@ -27,6 +31,7 @@ def periodic_check():
         time.sleep(0.1)
         time_passed = time_passed + 0.1
 
+
 def start_periodic_check_thread():
     global check_condition_thread, stop_thread_event
     if check_condition_thread and check_condition_thread.is_alive():
@@ -37,6 +42,7 @@ def start_periodic_check_thread():
     check_condition_thread = threading.Thread(target=periodic_check, daemon=True)
     check_condition_thread.start()
     print("Thread started.")
+
 
 def stop_periodic_check_thread():
     global stop_thread_event
