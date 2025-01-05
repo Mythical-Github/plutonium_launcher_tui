@@ -30,15 +30,15 @@ class PlutoniumLauncher(App):
     TITLE = "Plutonium Launcher"
 
     def compose(self) -> ComposeResult:
+        self.username_screen = usernames_screen.UsernameScreen()
+        self.game_directory_screen = game_directory_screen.GameDirectoryScreen()
+        self.game_args_screen = game_args_screen.GameArgsScreen()
+        self.global_args_screen = global_args_screen.GlobalArgsScreen()
         self.main_vertical_scroll_box_zero = VerticalScroll()
         self.plutonium_game_section = PlutoniumGameSection()
         self.user_bar = PlutoniumUserBar()
         self.global_args_section = PlutoniumGlobalArgsSection()
         self.game_args_section = PlutoniumGameSpecificArgsSection()
-        self.username_screen = usernames_screen.UsernameScreen()
-        self.game_directory_screen = game_directory_screen.GameDirectoryScreen()
-        self.game_args_screen = game_args_screen.GameArgsScreen()
-        self.global_args_screen = global_args_screen.GlobalArgsScreen()
         with self.main_vertical_scroll_box_zero:
             yield Header()
             yield self.plutonium_game_section
