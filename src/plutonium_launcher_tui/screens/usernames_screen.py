@@ -4,12 +4,14 @@ from plutonium_launcher_tui.settings import get_usernames, set_username
 
 
 class UsernameScreen(text_input_screen.TextInputScreen):
-    def __init__(self):
+    def __init__(self, widget_to_refresh=None):
         super().__init__(
             cancel_function=self.simulate_cancel_username_button_pressed,
             confirm_function=self.simulate_confirm_username_button_pressed,
-            input_name="username"
+            input_name="username",
+            widget_to_refresh=widget_to_refresh
         )
+        self.widget_to_refresh = widget_to_refresh
 
     def simulate_cancel_username_button_pressed(self, text_input):
         print_to_log_window('The cancel button was pressed')

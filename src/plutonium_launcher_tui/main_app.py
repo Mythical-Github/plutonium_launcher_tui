@@ -16,11 +16,13 @@ from plutonium_launcher_tui.screens import (
 from plutonium_launcher_tui.plutonium_launcher_widgets import (
     PlutoniumGameAutoExecuteBar,
     PlutoniumGameBar,
-    PlutoniumGameSection,
     PlutoniumGameSpecificArgsSection,
     PlutoniumGlobalArgsSection,
     PlutoniumUserBar,
-    PlutoniumWebsiteBar
+    PlutoniumWebsiteBar,
+    PlutoniumGameModeSelector,
+    PlutoniumGameDirectoryBar,
+    PlutoniumGameSelector
 )
 from plutonium_launcher_tui.screens import usernames_screen
 from plutonium_launcher_tui.settings import get_current_preferred_theme
@@ -31,17 +33,21 @@ class PlutoniumLauncher(App):
 
     def compose(self) -> ComposeResult:
         self.main_vertical_scroll_box_zero = VerticalScroll()
-        self.plutonium_game_section = PlutoniumGameSection()
+        self.game_selector = PlutoniumGameSelector()
+        self.game_mode_selector = PlutoniumGameModeSelector()
+        self.game_dir_select = PlutoniumGameDirectoryBar()
         self.user_bar = PlutoniumUserBar()
         self.global_args_section = PlutoniumGlobalArgsSection()
         self.game_args_section = PlutoniumGameSpecificArgsSection()
-        self.username_screen = usernames_screen.UsernameScreen()
-        self.game_directory_screen = game_directory_screen.GameDirectoryScreen()
-        self.game_args_screen = game_args_screen.GameArgsScreen()
-        self.global_args_screen = global_args_screen.GlobalArgsScreen()
+        self.username_screen = usernames_screen.UsernameScreen(widget_to_refresh=self.user_bar)
+        self.game_directory_screen = game_directory_screen.GameDirectoryScreen(widget_to_refresh=self.game_dir_select)
+        self.game_args_screen = game_args_screen.GameArgsScreen(widget_to_refresh=self.game_args_section)
+        self.global_args_screen = global_args_screen.GlobalArgsScreen(widget_to_refresh=self.global_args_section)
         with self.main_vertical_scroll_box_zero:
             yield Header()
-            yield self.plutonium_game_section
+            yield self.game_selector
+            yield self.game_mode_selector
+            yield self.game_dir_select
             yield self.user_bar
             yield self.global_args_section
             yield self.game_args_section

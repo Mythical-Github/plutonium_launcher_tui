@@ -322,11 +322,11 @@ def get_game_directory() -> str:
     else:
         game_dir = SETTINGS['games'][selected_game]['game_directory']
         if not os.path.isdir(game_dir) and not game_dir == default_game_dir:
-            from plutonium_launcher_tui.logger import print_to_log_window
-            print_message_one = f'The following stored game directory was invalid "{game_dir}"'
-            print_to_log_window(print_message_one)
-            print_message_two = f'Resetting the stored directory to default, please reselect the game directory'
-            print_to_log_window(print_message_two)
+            # from plutonium_launcher_tui import logger
+            # print_message_one = f'The following stored game directory was invalid "{game_dir}"'
+            # logger.print_to_log_window(print_message_one)
+            # print_message_two = f'Resetting the stored directory to default, please reselect the game directory'
+            # logger.print_to_log_window(print_message_two)
             game_dir = default_game_dir
             SETTINGS['games'][selected_game]['game_directory'] = game_dir
             save_settings()
@@ -409,3 +409,14 @@ def get_game_mode_options():
         return one
     else:
         return two
+
+def get_plutonium_appdata_dir() -> str:
+    if get_use_staging():
+        pluto_appdata_path = os.path.join(os.environ['LOCALAPPDATA'], 'Plutonium-staging')
+    else:
+        pluto_appdata_path = os.path.join(os.environ['LOCALAPPDATA'], 'Plutonium')
+    return pluto_appdata_path
+
+
+def get_plutonium_bootstrapper() -> str:
+    return os.path.normpath(f'{get_plutonium_appdata_dir()}/bin/plutonium-bootstrapper-win32.exe')

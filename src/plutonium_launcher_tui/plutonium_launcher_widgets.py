@@ -2,10 +2,10 @@ import os
 
 from textual import on
 from textual.app import ComposeResult
-from textual.containers import Vertical
 from textual.widgets import Checkbox, Select, Static
 from textual_spinbox import SpinBox
 
+from plutonium_launcher_tui import game_runner
 from plutonium_launcher_tui.os_file_browser import open_directory_in_file_browser
 from plutonium_launcher_tui.os_web_browser import open_website
 from plutonium_launcher_tui import enums
@@ -150,10 +150,7 @@ class RemoveGameArgButton(Static):
 
 
 def allow_game_args_blank() -> bool:
-    if len(get_game_specific_args()) == 0:
-        return True
-    else:
-        return False
+    return len(get_game_specific_args()) == 0
 
 
 class PlutoniumGameSpecificArgsSection(Static):
@@ -285,20 +282,22 @@ class PlutoniumGameDirectoryBar(Static):
         self.horizontal_box = BasePlutoniumLauncherHorizontalBox()
         with self.horizontal_box:
             self.game_dir_label = BasePlutoniumLauncherLabel("Game Directory:")
-            self.game_dir_location_label = BasePlutoniumLauncherLabel(get_game_directory())
+            self.game_dir_location_label = BasePlutoniumLauncherLabel(
+                get_game_directory(), 
+                label_width='1fr', 
+                label_content_align=('left', 'top'),
+                label_height='auto'
+            )
             self.select_dir_button = SelectGameDirectoryButton()
             yield self.game_dir_label
             yield self.game_dir_location_label
             yield self.select_dir_button
 
     def on_mount(self):
-        self.horizontal_box.styles.width = '100%'
         self.styles.width = '100%'
-        self.game_dir_location_label.styles.height = "3"
-        self.game_dir_location_label.styles.width = '1fr'
-        self.game_dir_location_label.styles.content_align = ("left", "middle")
-        self.game_dir_location_label.styles.text_align = "left"
-        self.game_dir_location_label.styles.align = ("left", "middle")
+        self.styles.height = 'auto'
+        self.styles.padding = 0
+        self.styles.margin = 0
         self.select_dir_button.styles.text_align = "center"
         self.select_dir_button.styles.align = ("center", "middle")
         self.select_dir_button.styles.content_align = ("center", "middle")
@@ -385,8 +384,10 @@ class PlutoniumGameSelector(Static):
             else:
                 main_value = 1
             
-        app.plutonium_game_section.game_mode_selector.my_select.value = main_value
-        app.plutonium_game_section.game_mode_selector.refresh(recompose=True)
+        app.game_mode_selector.my_select.value = main_value
+        app.game_mode_selector.refresh(recompose=True)
+        app.game_dir_select.refresh(recompose=True)
+        app.game_args_section.refresh(recompose=True)
         print_to_log_window(f'Loaded settings for: {get_current_selected_game().value}')
 
 
@@ -394,21 +395,6 @@ class PlutoniumGameSelector(Static):
         self.my_select.styles.content_align = ("center", "middle")
         self.my_select.styles.align = ("center", "middle")
         self.my_select.styles.height = "auto"
-
-
-class PlutoniumGameSection(Static):
-    def compose(self) -> ComposeResult:
-        self.vertical_box = Vertical()
-        self.game_selector = PlutoniumGameSelector()
-        self.game_mode_selector = PlutoniumGameModeSelector()
-        self.game_dir_select = PlutoniumGameDirectoryBar()
-        with self.vertical_box:
-            yield self.game_selector
-            yield self.game_mode_selector
-            yield self.game_dir_select
-
-    def on_mount(self):
-        self.vertical_box.styles.height = "auto"
 
 
 class AddUserButton(Static):
@@ -521,7 +507,7 @@ class RunGameButton(Static):
         yield self.button
 
     def on_button_pressed(self) -> None:
-        print_to_log_window('Run Game')
+        game_runner.run_game()
 
     def on_mount(self):
         self.styles.width = "33%"

@@ -44,10 +44,16 @@ def post_cancel_button_pressed():
     app.pop_screen()
 
 
+global_widget_to_refresh = None
+def get_widget_to_refresh():
+    global global_widget_to_refresh
+    return global_widget_to_refresh
+
+
 def post_confirm_button_pressed():
     from plutonium_launcher_tui.main_app import app
     get_screen_text_input().value = ''
-    app.user_bar.refresh(recompose=True)
+    get_widget_to_refresh().refresh(recompose=True)
     app.pop_screen()
 
 
@@ -93,18 +99,25 @@ class TextInputScreenInput(Input):
         simulate_confirm_button_pressed(self.confirm_function)
         post_confirm_button_pressed()
 
+main_layout = None
+def get_main_layout():
+    global main_layout 
+    return main_layout
+
 
 class TextInputMainLayout(Static):
     def __init__(
         self,
         cancel_function,
         confirm_function,
-        input_name
+        input_name,
+        widget_to_refresh
     ):
         super().__init__()
         self.cancel_function = cancel_function
         self.confirm_function = confirm_function
         self.input_name = input_name
+        self.widget_to_refresh = widget_to_refresh
     BINDINGS = [
         ("escape", "cancel", "Simulates hitting the cancel button")
     ]
@@ -128,6 +141,11 @@ class TextInputMainLayout(Static):
             yield self.horizontal_bar
         yield self.vertical_scrollbox
 
+        global main_text_input
+        main_text_input = self.text_input
+        global global_widget_to_refresh
+        global_widget_to_refresh = self.widget_to_refresh
+
     def on_mount(self):
         self.label.styles.width = '100%'
         self.horizontal_bar.styles.align = ('center', 'middle')
@@ -135,11 +153,11 @@ class TextInputMainLayout(Static):
         self.vertical_scrollbox.styles.content_align = ('center', 'middle')
         self.text_input.styles.width = '1fr'
         self.horizontal_bar.styles.border = ('solid', 'grey')
-        
-        self.parent.parent.set_focus(self.text_input)
 
         global main_text_input
         main_text_input = self.text_input
+        global global_widget_to_refresh
+        global_widget_to_refresh = self.widget_to_refresh
 
     def action_cancel(self):
         simulate_cancel_button_pressed(self.cancel_function)
@@ -151,24 +169,32 @@ class TextInputScreen(Screen):
         self,
         cancel_function,
         confirm_function,
-        input_name
+        input_name,
+        widget_to_refresh
     ):
         super().__init__()
         self.cancel_function = cancel_function
         self.confirm_function = confirm_function
         self.input_name = input_name
+        self.widget_to_refresh = widget_to_refresh
 
     def compose(self) -> ComposeResult:
         self.header = Header()
-        self.text_input_main_layout = TextInputMainLayout(self.cancel_function, self.confirm_function, self.input_name)
+        self.text_input_main_layout = TextInputMainLayout(self.cancel_function, self.confirm_function, self.input_name, self.widget_to_refresh)
         self.vertical_scroll = VerticalScroll()
         with self.vertical_scroll:
             yield self.header
             yield self.text_input_main_layout
         yield self.vertical_scroll
+        global main_layout
+        main_layout = self.text_input_main_layout
 
     def on_mount(self):
         self.vertical_scroll.styles.margin = 0
         self.vertical_scroll.styles.padding = 0
         self.vertical_scroll.styles.border = ("solid", "grey")
         self.vertical_scroll.styles.align = ('center', 'middle')
+
+    def _on_screen_resume(self):
+        self.screen.set_focus(self.text_input_main_layout.text_input)
+        return super()._on_screen_resume()
