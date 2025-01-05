@@ -2,8 +2,9 @@ import time
 import threading
 
 from plutonium_launcher_tui import game_runner
-from plutonium_launcher_tui.settings import get_auto_run_game_delay, get_auto_run_game, get_title_for_app
+from plutonium_launcher_tui.settings import get_auto_run_game_delay, get_auto_run_game, get_title_for_app, set_auto_run_game_delay
 from plutonium_launcher_tui.customization import set_window_title
+from plutonium_launcher_tui.plutonium_launcher_widgets import get_spinbox
 
 
 has_auto_run_game = False
@@ -28,7 +29,13 @@ def periodic_check():
     global time_passed, last_run_time
     while not stop_thread_event.is_set():
         set_window_title(get_title_for_app())
-        if time_passed - get_auto_run_game_delay() > TOLERANCE:
+
+        if not get_spinbox() == None:
+            if not delay == get_spinbox().value:
+                set_auto_run_game_delay(get_spinbox().value)
+
+        delay = get_auto_run_game_delay()
+        if (time_passed - delay) > TOLERANCE:
             global has_auto_run_game
             if not has_auto_run_game:
                 current_time = time.time()
@@ -37,6 +44,26 @@ def periodic_check():
                     last_run_time = current_time
         time.sleep(0.1)
         time_passed = time_passed + 0.1
+
+
+# def periodic_check():
+#     global time_passed, last_run_time
+#     while not stop_thread_event.is_set():
+#         set_window_title(get_title_for_app())
+
+#         if not get_spinbox() == None:
+#             if not get_auto_run_game_delay() == get_spinbox().value:
+#                 set_auto_run_game_delay(get_spinbox().value)
+
+#         if (time_passed - float(get_auto_run_game_delay())) > TOLERANCE:
+#             global has_auto_run_game
+#             if not has_auto_run_game:
+#                 current_time = time.time()
+#                 if current_time - last_run_time >= MAX_RUN_INTERVAL:
+#                     action_on_condition()
+#                     last_run_time = current_time
+#         time.sleep(0.1)
+#         time_passed = time_passed + 0.1
 
 
 def start_periodic_check_thread():
