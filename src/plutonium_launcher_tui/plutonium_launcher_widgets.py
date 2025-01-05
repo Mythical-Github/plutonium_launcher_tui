@@ -401,11 +401,10 @@ class PlutoniumGameSection(Static):
         self.vertical_box = Vertical()
         self.game_selector = PlutoniumGameSelector()
         self.game_mode_selector = PlutoniumGameModeSelector()
-        self.game_dir_select = PlutoniumGameDirectoryBar()
         with self.vertical_box:
             yield self.game_selector
             yield self.game_mode_selector
-            yield self.game_dir_select
+            yield PlutoniumGameDirectoryBar()
 
     def on_mount(self):
         self.vertical_box.styles.height = "auto"
