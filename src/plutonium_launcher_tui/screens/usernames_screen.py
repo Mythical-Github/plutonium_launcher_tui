@@ -1,5 +1,5 @@
-from plutonium_launcher_tui.screens import text_input_screen
 from plutonium_launcher_tui.logger import print_to_log_window
+from plutonium_launcher_tui.screens import text_input_screen
 from plutonium_launcher_tui.settings import get_usernames, set_username
 
 

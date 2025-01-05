@@ -5,16 +5,15 @@ from textual.app import ComposeResult
 from textual.widgets import Checkbox, Select, Static
 from textual_spinbox import SpinBox
 
-from plutonium_launcher_tui import game_runner
-from plutonium_launcher_tui.os_file_browser import open_directory_in_file_browser
-from plutonium_launcher_tui.os_web_browser import open_website
-from plutonium_launcher_tui import enums
+from plutonium_launcher_tui import enums, game_runner
 from plutonium_launcher_tui.base_widgets import (
     BasePlutoniumLauncherButton,
     BasePlutoniumLauncherHorizontalBox,
-    BasePlutoniumLauncherLabel
+    BasePlutoniumLauncherLabel,
 )
 from plutonium_launcher_tui.logger import print_to_log_window
+from plutonium_launcher_tui.os_file_browser import open_directory_in_file_browser
+from plutonium_launcher_tui.os_web_browser import open_website
 from plutonium_launcher_tui.settings import (
     get_auto_run_game,
     get_auto_run_game_delay,
@@ -22,15 +21,15 @@ from plutonium_launcher_tui.settings import (
     get_current_username,
     get_currently_selected_game_mode,
     get_game_directory,
+    get_game_mode_options,
+    get_game_specific_args,
     get_global_args,
     get_use_staging,
     get_usernames,
+    set_auto_run_game,
     set_current_selected_game,
     set_currently_selected_game_mode,
-    get_game_specific_args,
     set_use_staging,
-    set_auto_run_game,
-    get_game_mode_options
 )
 
 
@@ -283,8 +282,8 @@ class PlutoniumGameDirectoryBar(Static):
         with self.horizontal_box:
             self.game_dir_label = BasePlutoniumLauncherLabel("Game Directory:")
             self.game_dir_location_label = BasePlutoniumLauncherLabel(
-                get_game_directory(), 
-                label_width='1fr', 
+                get_game_directory(),
+                label_width='1fr',
                 label_content_align=('left', 'top'),
                 label_height='auto'
             )
@@ -376,14 +375,11 @@ class PlutoniumGameSelector(Static):
         set_current_selected_game(enums.get_enum_from_val(enums.PlutoniumGames, self.options[event.value][0]))
         from plutonium_launcher_tui.main_app import app
         # below comparison is borked somehow, fix later
-        if get_current_selected_game() == enums.PlutoniumGames.CALL_OF_DUTY_MODERN_WARFARE_III.value:
+        if get_current_selected_game() == enums.PlutoniumGames.CALL_OF_DUTY_MODERN_WARFARE_III.value or get_currently_selected_game_mode() == enums.PlutoniumGameModes.SINGLE_PLAYER:
             main_value = 0
         else:
-            if get_currently_selected_game_mode() == enums.PlutoniumGameModes.SINGLE_PLAYER:
-                main_value = 0
-            else:
-                main_value = 1
-            
+            main_value = 1
+
         app.game_mode_selector.my_select.value = main_value
         app.game_mode_selector.refresh(recompose=True)
         app.game_dir_select.refresh(recompose=True)

@@ -1,9 +1,6 @@
-from plutonium_launcher_tui.screens import text_input_screen
 from plutonium_launcher_tui.logger import print_to_log_window
-from plutonium_launcher_tui.settings import (
-    get_game_specific_args,
-    add_game_specific_arg
-)
+from plutonium_launcher_tui.screens import text_input_screen
+from plutonium_launcher_tui.settings import add_game_specific_arg, get_game_specific_args
 
 
 class GameArgsScreen(text_input_screen.TextInputScreen):

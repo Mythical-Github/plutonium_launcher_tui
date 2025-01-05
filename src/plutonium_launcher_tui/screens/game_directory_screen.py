@@ -1,8 +1,8 @@
 import os
 
-from plutonium_launcher_tui.screens import text_input_screen
 from plutonium_launcher_tui.logger import print_to_log_window
-from plutonium_launcher_tui.settings import set_game_directory, get_current_selected_game
+from plutonium_launcher_tui.screens import text_input_screen
+from plutonium_launcher_tui.settings import get_current_selected_game, set_game_directory
 
 
 class GameDirectoryScreen(text_input_screen.TextInputScreen):
@@ -21,7 +21,7 @@ class GameDirectoryScreen(text_input_screen.TextInputScreen):
     def confirm(self, text_input):
         print_to_log_window('The confirm button was pressed')
         dir_path = os.path.normpath(str(text_input.value).strip().strip('"').strip("'"))
-        
+
         if not os.path.isdir(dir_path) or dir_path == '.':
             is_not_a_dir_message = f'The following provided directory is invalid: "{dir_path}"'
             print_to_log_window(is_not_a_dir_message)
@@ -29,4 +29,3 @@ class GameDirectoryScreen(text_input_screen.TextInputScreen):
             is_a_dir_message = f'The following provided directory: "{dir_path}" was set for the following game: "{get_current_selected_game()}"'
             set_game_directory(dir_path)
             print_to_log_window(is_a_dir_message)
-        

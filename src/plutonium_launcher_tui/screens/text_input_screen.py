@@ -26,7 +26,7 @@ class ConfirmButton(Static):
         self.confirm_button.styles.width = 'auto'
         self.styles.width = 'auto'
         self.styles.height = 'auto'
-    
+
     def on_button_pressed(self) -> None:
         simulate_confirm_button_pressed(self.confirm_function)
         post_confirm_button_pressed()
@@ -64,7 +64,7 @@ def simulate_cancel_button_pressed(function):
 def simulate_confirm_button_pressed(function):
     function(get_screen_text_input())
 
-    
+
 
 class CancelButton(Static):
     def __init__(
@@ -101,7 +101,7 @@ class TextInputScreenInput(Input):
 
 main_layout = None
 def get_main_layout():
-    global main_layout 
+    global main_layout
     return main_layout
 
 

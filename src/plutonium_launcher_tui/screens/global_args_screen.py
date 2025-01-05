@@ -1,9 +1,6 @@
-from plutonium_launcher_tui.screens import text_input_screen
 from plutonium_launcher_tui.logger import print_to_log_window
-from plutonium_launcher_tui.settings import (
-    add_global_arg,
-    get_global_args
-)
+from plutonium_launcher_tui.screens import text_input_screen
+from plutonium_launcher_tui.settings import add_global_arg, get_global_args
 
 
 class GlobalArgsScreen(text_input_screen.TextInputScreen):
@@ -28,5 +25,5 @@ class GlobalArgsScreen(text_input_screen.TextInputScreen):
             print_to_log_window('You cannot add a global argument that already exists')
         else:
             add_global_arg(text_value)
-        
+
         text_input.value = ''

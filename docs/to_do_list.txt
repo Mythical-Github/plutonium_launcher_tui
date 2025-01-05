@@ -1,6 +1,6 @@
 
-delay stuff
-auto run game logic
+changing delay value should also change the value in the ini
+when loading up the app it should load and set the value from the ini value
 
 
 later:

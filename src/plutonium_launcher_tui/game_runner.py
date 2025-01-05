@@ -1,17 +1,17 @@
 import os
 import subprocess
 
-from plutonium_launcher_tui.logger import print_to_log_window
 from plutonium_launcher_tui.enums import PlutoniumGameModes, PlutoniumGames
+from plutonium_launcher_tui.logger import print_to_log_window
 from plutonium_launcher_tui.settings import (
-    get_game_directory, 
-    get_game_specific_args, 
-    get_global_args, 
-    get_currently_selected_game_mode,
     get_current_selected_game,
-    get_plutonium_bootstrapper,
     get_current_username,
-    get_plutonium_appdata_dir
+    get_currently_selected_game_mode,
+    get_game_directory,
+    get_game_specific_args,
+    get_global_args,
+    get_plutonium_appdata_dir,
+    get_plutonium_bootstrapper,
 )
 
 
@@ -84,7 +84,7 @@ def run_game():
 #     for arg in get_global_args():
 #         exe = f'{exe} {arg}'
 #     print_to_log_window(f"Command: {exe}")
-    
+
 #     os.chdir(get_plutonium_appdata_dir())
 #     process = subprocess.Popen(
 #         exe,

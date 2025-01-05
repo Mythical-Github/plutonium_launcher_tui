@@ -2,6 +2,7 @@ import os
 
 import pygetwindow
 from textual.app import App
+
 # from textual.theme import ThemeProvider
 
 

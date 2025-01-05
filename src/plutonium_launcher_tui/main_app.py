@@ -1,31 +1,24 @@
+
 from textual.app import App, ComposeResult
 from textual.containers import VerticalScroll
 from textual.widgets import Header
 
 from plutonium_launcher_tui import logger
-from plutonium_launcher_tui.customization import (
-    set_terminal_size, 
-    set_window_title
-)
-from plutonium_launcher_tui.screens import (
-    usernames_screen, 
-    game_args_screen,
-    game_directory_screen,
-    global_args_screen
-)
+from plutonium_launcher_tui.auto_run_thread import start_periodic_check_thread
+from plutonium_launcher_tui.customization import set_terminal_size, set_window_title
 from plutonium_launcher_tui.plutonium_launcher_widgets import (
     PlutoniumGameAutoExecuteBar,
     PlutoniumGameBar,
+    PlutoniumGameDirectoryBar,
+    PlutoniumGameModeSelector,
+    PlutoniumGameSelector,
     PlutoniumGameSpecificArgsSection,
     PlutoniumGlobalArgsSection,
     PlutoniumUserBar,
     PlutoniumWebsiteBar,
-    PlutoniumGameModeSelector,
-    PlutoniumGameDirectoryBar,
-    PlutoniumGameSelector
 )
-from plutonium_launcher_tui.screens import usernames_screen
-from plutonium_launcher_tui.settings import get_current_preferred_theme
+from plutonium_launcher_tui.screens import game_args_screen, game_directory_screen, global_args_screen, usernames_screen
+from plutonium_launcher_tui.settings import get_auto_run_game, get_current_preferred_theme
 
 
 class PlutoniumLauncher(App):
@@ -75,6 +68,8 @@ def configure_app():
 
 
 def run_main_app():
+    if get_auto_run_game():
+        start_periodic_check_thread()
     configure_app()
     app.run()
 

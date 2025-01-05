@@ -192,7 +192,7 @@ def get_currently_selected_game_mode() -> enums.PlutoniumGameModes:
         current_game_mode = enums.PlutoniumGameModes.MULTIPLAYER.value
         game_specific_section['last_selected_game_mode'] = current_game_mode
         save_settings()
-        
+
     return enums.PlutoniumGameModes(current_game_mode)
 
 
@@ -321,7 +321,7 @@ def get_game_directory() -> str:
         save_settings()
     else:
         game_dir = SETTINGS['games'][selected_game]['game_directory']
-        if not os.path.isdir(game_dir) and not game_dir == default_game_dir:
+        if not os.path.isdir(game_dir) and game_dir != default_game_dir:
             # from plutonium_launcher_tui import logger
             # print_message_one = f'The following stored game directory was invalid "{game_dir}"'
             # logger.print_to_log_window(print_message_one)
