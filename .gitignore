@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 assets/base/plutonium_launcher_tui.exe
 src/plutonium_launcher_tui/_version.py
+src/plutonium_launcher_tui/settings.toml
