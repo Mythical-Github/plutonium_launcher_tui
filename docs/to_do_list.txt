@@ -1,7 +1,7 @@
 
-changing delay value should also change the value in the ini
-when loading up the app it should load and set the value from the ini value
-
+    improve print outs for various interactions
+    set terminal font size (8)
+    remember selected user theme preference
 
 later:
     Maybe a close game/pluto instances button
@@ -12,14 +12,12 @@ later:
             https://cdn.plutoniummod.com/updater/prod/info.json
         update button, that opens up alternate screen with options to use https://github.com/mxve/plutonium-updater.rs, or button just updates, check about staging
     
-    set terminal font size (8)
     auto hide default scroll bar in terminal
     pluto ascii art
     current players in game, similar to their discord command for it
-    remember selected user theme preference
-    remember user specified window position
+    remember user specified window position, seems windows just does this
     remember user specified monitor index
     log text doesn't always wrap
-    improve print outs for various interactions
-    exe version
     remember scrollbar placement for when the app is scrunched
+    test and make work on linux
+    mention it works best on windows terminal in readme
