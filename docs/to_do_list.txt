@@ -1,5 +1,8 @@
 
-game args/username focus is off but not global args it seems
+set focus is being weird, seems to only work consistently when the enter button was pressed
+
+clearing of text after cancel and confirm in alt screens is broken at times
+
 game directory section
 run game
 
