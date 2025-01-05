@@ -22,6 +22,7 @@ from plutonium_launcher_tui.plutonium_launcher_widgets import (
     PlutoniumUserBar,
     PlutoniumWebsiteBar
 )
+from plutonium_launcher_tui.screens import usernames_screen
 from plutonium_launcher_tui.settings import get_current_preferred_theme
 
 
