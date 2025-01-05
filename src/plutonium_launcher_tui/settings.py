@@ -283,12 +283,17 @@ def set_use_staging(use_staging: bool):
 
 
 def get_current_preferred_theme() -> str:
-    global_settings = SETTINGS.get('global', {})
+    # Check if SETTINGS is defined and has the 'global' section
+    if not isinstance(SETTINGS, dict) or 'global' not in SETTINGS:
+        # If SETTINGS is not a valid dictionary or doesn't have 'global', return a default theme
+        return 'tokyo-night'
+
+    global_settings = SETTINGS['global']
     theme = global_settings.get('theme')
 
-    if not theme:
-        theme = 'tokyo-night'
-        set_current_preferred_theme(theme)
+    # if not theme:
+    #     theme = 'tokyo-night'
+    #     set_current_preferred_theme(theme)
 
     return theme
 

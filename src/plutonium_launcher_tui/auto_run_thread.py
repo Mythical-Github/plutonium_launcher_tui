@@ -1,12 +1,19 @@
-import time
 import threading
+import time
 
 from plutonium_launcher_tui import game_runner
-from plutonium_launcher_tui.settings import get_auto_run_game_delay, get_auto_run_game, get_title_for_app, set_auto_run_game_delay
 from plutonium_launcher_tui.customization import set_window_title
 from plutonium_launcher_tui.plutonium_launcher_widgets import get_spinbox
+from plutonium_launcher_tui.settings import (
+    get_auto_run_game,
+    get_auto_run_game_delay,
+    get_current_preferred_theme,
+    get_title_for_app,
+    set_auto_run_game_delay,
+    set_current_preferred_theme,
+)
 
-
+has_initially_set_theme = False
 has_auto_run_game = False
 check_condition_thread = None
 stop_thread_event = threading.Event()
@@ -15,6 +22,25 @@ time_passed = 0.0
 last_run_time = 0.0
 TOLERANCE = 0.1
 MAX_RUN_INTERVAL = 1.0
+
+
+def get_currently_selected_theme() -> str:
+    global app_instance
+
+    if app_instance is not None:
+
+        return app_instance.theme
+    else:
+        return "No App Instance Found"
+
+
+def check_theme():
+    if app_instance:
+        global has_initially_set_theme
+        if has_initially_set_theme:
+            current_theme = get_currently_selected_theme()
+            if get_current_preferred_theme() != current_theme:
+                set_current_preferred_theme(current_theme)
 
 
 def action_on_condition():
@@ -29,9 +55,10 @@ def periodic_check():
     global time_passed, last_run_time
     while not stop_thread_event.is_set():
         set_window_title(get_title_for_app())
+        check_theme()
 
-        if not get_spinbox() == None:
-            if not delay == get_spinbox().value:
+        if get_spinbox() != None:
+            if delay != get_spinbox().value:
                 set_auto_run_game_delay(get_spinbox().value)
 
         delay = get_auto_run_game_delay()
@@ -45,28 +72,10 @@ def periodic_check():
         time.sleep(0.1)
         time_passed = time_passed + 0.1
 
-
-# def periodic_check():
-#     global time_passed, last_run_time
-#     while not stop_thread_event.is_set():
-#         set_window_title(get_title_for_app())
-
-#         if not get_spinbox() == None:
-#             if not get_auto_run_game_delay() == get_spinbox().value:
-#                 set_auto_run_game_delay(get_spinbox().value)
-
-#         if (time_passed - float(get_auto_run_game_delay())) > TOLERANCE:
-#             global has_auto_run_game
-#             if not has_auto_run_game:
-#                 current_time = time.time()
-#                 if current_time - last_run_time >= MAX_RUN_INTERVAL:
-#                     action_on_condition()
-#                     last_run_time = current_time
-#         time.sleep(0.1)
-#         time_passed = time_passed + 0.1
-
-
-def start_periodic_check_thread():
+app_instance = None
+def start_periodic_check_thread(app):
+    global app_instance
+    app_instance = app
     global check_condition_thread, stop_thread_event
     if check_condition_thread and check_condition_thread.is_alive():
         print("Thread is already running.")

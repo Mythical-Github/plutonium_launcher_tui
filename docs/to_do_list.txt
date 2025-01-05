@@ -1,5 +1,4 @@
 To Do:
-    remember selected user theme preference
     improve print outs for various interactions
 
 

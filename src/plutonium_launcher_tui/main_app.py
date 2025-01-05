@@ -18,12 +18,12 @@ from plutonium_launcher_tui.plutonium_launcher_widgets import (
     PlutoniumWebsiteBar,
 )
 from plutonium_launcher_tui.screens import game_args_screen, game_directory_screen, global_args_screen, usernames_screen
-from plutonium_launcher_tui.settings import get_auto_run_game, get_current_preferred_theme, get_title_for_app
+from plutonium_launcher_tui.settings import get_current_preferred_theme, get_title_for_app
 
+has_initially_set_theme = False
 
 class PlutoniumLauncher(App):
     TITLE = get_title_for_app()
-
     def compose(self) -> ComposeResult:
         self.main_vertical_scroll_box_zero = VerticalScroll()
         self.game_selector = PlutoniumGameSelector()
@@ -57,7 +57,9 @@ class PlutoniumLauncher(App):
         self.main_vertical_scroll_box_zero.styles.margin = 0
         self.main_vertical_scroll_box_zero.styles.padding = 0
         self.main_vertical_scroll_box_zero.styles.border = ("solid", "grey")
-        self.theme = get_current_preferred_theme()    
+        self.theme = get_current_preferred_theme()
+        from plutonium_launcher_tui import auto_run_thread
+        auto_run_thread.has_initially_set_theme = True
 
 
 def configure_app():
@@ -69,7 +71,8 @@ def configure_app():
 
 def run_main_app():
     configure_app()
-    start_periodic_check_thread()
+    start_periodic_check_thread(app)
     app.run()
+
 
 app = PlutoniumLauncher()
