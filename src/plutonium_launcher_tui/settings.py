@@ -420,3 +420,7 @@ def get_plutonium_appdata_dir() -> str:
 
 def get_plutonium_bootstrapper() -> str:
     return os.path.normpath(f'{get_plutonium_appdata_dir()}/bin/plutonium-bootstrapper-win32.exe')
+
+
+def get_title_for_app() -> str:
+    return 'Plutonium Launcher'

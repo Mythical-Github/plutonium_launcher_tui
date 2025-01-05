@@ -1,10 +1,12 @@
-import threading
 import time
+import threading
 
 from plutonium_launcher_tui import game_runner
-from plutonium_launcher_tui.settings import get_auto_run_game_delay, get_auto_run_game
+from plutonium_launcher_tui.settings import get_auto_run_game_delay, get_auto_run_game, get_title_for_app
+from plutonium_launcher_tui.customization import set_window_title
 
 
+has_auto_run_game = False
 check_condition_thread = None
 stop_thread_event = threading.Event()
 
@@ -17,17 +19,22 @@ MAX_RUN_INTERVAL = 1.0
 def action_on_condition():
     print("Condition met! Performing action...")
     if get_auto_run_game():
-
         game_runner.run_game()
+        global has_auto_run_game
+        has_auto_run_game = True
+
 
 def periodic_check():
     global time_passed, last_run_time
     while not stop_thread_event.is_set():
-        if abs(time_passed - get_auto_run_game_delay()) < TOLERANCE:
-            current_time = time.time()
-            if current_time - last_run_time >= MAX_RUN_INTERVAL:
-                action_on_condition()
-                last_run_time = current_time
+        set_window_title(get_title_for_app())
+        if time_passed - get_auto_run_game_delay() > TOLERANCE:
+            global has_auto_run_game
+            if not has_auto_run_game:
+                current_time = time.time()
+                if current_time - last_run_time >= MAX_RUN_INTERVAL:
+                    action_on_condition()
+                    last_run_time = current_time
         time.sleep(0.1)
         time_passed = time_passed + 0.1
 
