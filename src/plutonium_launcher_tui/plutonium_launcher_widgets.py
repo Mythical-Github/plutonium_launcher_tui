@@ -218,6 +218,11 @@ class StagingCheckBox(Static):
         check_box_changed_message = f'{event.value}'
         print_to_log_window(check_box_changed_message)
 
+delay_spinbox = None
+def get_spinbox():
+    global delay_spinbox
+    return delay_spinbox
+
 
 class PlutoniumGameAutoExecuteBar(Static):
     def compose(self) -> ComposeResult:
@@ -253,6 +258,8 @@ class PlutoniumGameAutoExecuteBar(Static):
         self.auto_execute_checkbox.styles.width = 'auto'
         self.auto_execute_checkbox.styles.content_align = ("center", "middle")
         self.staging_checkbox.styles.width = 'auto'
+        global delay_spinbox
+        delay_spinbox = self.auto_execute_delay_spin_box
 
 
 class SelectGameDirectoryButton(Static):

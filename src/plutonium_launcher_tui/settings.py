@@ -78,7 +78,7 @@ def set_auto_run_game_delay(delay_in_seconds: float):
     if 'global' not in SETTINGS:
         SETTINGS['global'] = {}
 
-    SETTINGS['global']['auto_run_game_delay'] = delay_in_seconds
+    SETTINGS['global']['auto_run_game_delay'] = float(delay_in_seconds)
 
     save_settings()
 
