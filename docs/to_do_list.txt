@@ -1,17 +1,10 @@
 
-set focus is being weird, seems to only work consistently when the enter button was pressed
-
-clearing of text after cancel and confirm in alt screens is broken at times
-
-game directory section
-run game
-
-
 delay stuff
 auto run game logic
 
 
 later:
+    Maybe a close game/pluto instances button
     Update/Install functionality:
         staging url:
             https://cdn.plutonium.pw/updater/staging/info.json
@@ -29,3 +22,4 @@ later:
     log text doesn't always wrap
     improve print outs for various interactions
     exe version
+    remember scrollbar placement for when the app is scrunched
