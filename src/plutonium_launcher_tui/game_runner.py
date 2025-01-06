@@ -66,7 +66,8 @@ def run_game():
             exe,
             cwd=get_plutonium_appdata_dir(),
             stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL
+            stderr=subprocess.DEVNULL,
+            stdin=subprocess.DEVNULL
         )
 
 # def run_game():

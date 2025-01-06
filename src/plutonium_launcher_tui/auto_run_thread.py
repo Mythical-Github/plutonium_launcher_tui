@@ -44,7 +44,7 @@ def check_theme():
 
 
 def action_on_condition():
-    print("Condition met! Performing action...")
+    # print("Condition met! Performing action...")
     if get_auto_run_game():
         game_runner.run_game()
         global has_auto_run_game
@@ -77,14 +77,14 @@ def start_periodic_check_thread(app):
     global app_instance
     app_instance = app
     global check_condition_thread, stop_thread_event
-    if check_condition_thread and check_condition_thread.is_alive():
-        print("Thread is already running.")
-        return
+    # if check_condition_thread and check_condition_thread.is_alive():
+    #     print("Thread is already running.")
+    #     return
 
     stop_thread_event.clear()
     check_condition_thread = threading.Thread(target=periodic_check, daemon=True)
     check_condition_thread.start()
-    print("Thread started.")
+    # print("Thread started.")
 
 
 def stop_periodic_check_thread():
@@ -92,4 +92,4 @@ def stop_periodic_check_thread():
     stop_thread_event.set()
     if check_condition_thread:
         check_condition_thread.join()
-    print("Thread stopped.")
+    # print("Thread stopped.")

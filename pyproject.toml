@@ -23,11 +23,9 @@ classifiers = [
 ]
 dependencies = [
   "textual",
-  "pyjson5",
-  "textual-spinbox @ git+https://github.com/friscorose/textual-spinbox",
   "tomlkit",
   "pygetwindow",
-  "textual-fspicker @ git+https://github.com/davep/textual-fspicker"
+  "textual-spinbox @ git+https://github.com/friscorose/textual-spinbox"
 ]
 
 [project.urls]
