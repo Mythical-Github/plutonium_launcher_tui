@@ -1,6 +1,7 @@
 To Do:
     improve print outs for various interactions
     appease the linter
+    check out input arg validation, seems to return blank when should not at times
 
 
 Later:
