@@ -1,15 +1,19 @@
 
 ## Plutonium Launcher TUI
 - This is a text-based UI launcher for the COD client [Plutonium](https://plutonium.pw/).
+- Click [here](https://github.com/Mythical-Github/plutonium_launcher_tui/releases/latest/download/plutonium_launcher_tui.zip) to download the latest prebuilt exe release.
 
 
 ### Features:
-- Supports all games.
-- Staging support.
-- Theme customization.
-- Global argument list.
-- Game-specific argument list.
-- Username selection.
+- Supports all games the official Plutonium Launcher does
+- Game mode selection
+- Staging support (testing branch)
+- Theme customization
+- Global argument list
+- Game-specific argument lists
+- Username selection
+- Utility Buttons
+- Automatic game running, with configureable delay
 
 
 #### Image Example:
@@ -20,10 +24,10 @@
 
 
 ### App Details:
-- **Optimized for Windows Terminal**: The app is designed for Windows Terminal but also works in the standard command prompt.
+- **Made for Windows Terminal**: The app is designed for Windows Terminal but also works in the standard command prompt.
 - **Font Size**: Designed for font size **8**. Future versions will adjust the font size automatically.
-- **Platform Support**: Currently tested on **Windows**, with future plans for cross-platform support.
-- **Other**: Currently only supports **Plutonium's LAN mode**, with potential for more features in future updates.
+- **Platform Support**: Currently tested on **Windows**, with future plans for atleast modern Ubuntu and Debian Linux installs.
+- **Other**: Currently only supports Plutonium's **LAN** mode, if possible, I will change this in the future. Currently token generation is all that is left to do this.
 
 
 ### Technologies:
