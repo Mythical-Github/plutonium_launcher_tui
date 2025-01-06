@@ -12,8 +12,11 @@
 - Username selection.
 
 
-### Example:
+#### Image Example:
 <img src="https://github.com/user-attachments/assets/8e7643da-d957-4db0-a097-a220290abe53" alt="example" width="50%" height="50%">
+
+#### Video Example:
+[![Video Example](https://github.com/user-attachments/assets/6cfe0fe5-3b89-4fe0-9c86-d28ac787b890)](https://github.com/user-attachments/assets/6cfe0fe5-3b89-4fe0-9c86-d28ac787b890)
 
 
 ### App Details:
