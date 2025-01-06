@@ -19,7 +19,7 @@ class GlobalArgsScreen(text_input_screen.TextInputScreen):
     def confirm(self, text_input):
         text_value = text_input.value
 
-        if not text_value or text_value.strip() == '':
+        if not text_input or text_value.strip() == '':
             print_to_log_window('You cannot add a blank argument')
         elif text_value in get_global_args():
             print_to_log_window('You cannot add a global argument that already exists')

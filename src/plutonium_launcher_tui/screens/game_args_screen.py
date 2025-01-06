@@ -17,8 +17,8 @@ class GameArgsScreen(text_input_screen.TextInputScreen):
         print_to_log_window('The cancel button was pressed')
 
     def confirm(self, text_input):
-        text_value = text_input.value
-        if text_value.strip() == '':
+        text_value = text_input.value.strip()
+        if not text_input or text_value.strip() == '':
             print_to_log_window('You cannot add a blank argument')
         elif text_value in get_game_specific_args():
             print_to_log_window('You cannot add a game argument that already exists')
