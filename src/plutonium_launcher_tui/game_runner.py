@@ -11,7 +11,7 @@ from plutonium_launcher_tui.settings import (
     get_game_specific_args,
     get_global_args,
     get_plutonium_appdata_dir,
-    get_plutonium_bootstrapper,
+    get_plutonium_bootstrapper
 )
 
 
@@ -69,36 +69,3 @@ def run_game():
             stderr=subprocess.DEVNULL,
             stdin=subprocess.DEVNULL
         )
-
-# def run_game():
-#     exe = f'"{get_plutonium_bootstrapper()}"'
-#     exe = f'{exe} "{get_game_launch_arg()}"'
-#     exe = f'{exe} "{get_game_directory()}"'
-#     exe = f'{exe} +name'
-#     exe = f'{exe} {get_current_username()}'
-#     exe = f'{exe} -lan'
-#     args = []
-#     for arg in args:
-#         exe = f'{exe} {arg}'
-#     for arg in get_game_specific_args():
-#         exe = f'{exe} {arg}'
-#     for arg in get_global_args():
-#         exe = f'{exe} {arg}'
-#     print_to_log_window(f"Command: {exe}")
-
-#     os.chdir(get_plutonium_appdata_dir())
-#     process = subprocess.Popen(
-#         exe,
-#         cwd=get_plutonium_appdata_dir(),
-#         stdout=subprocess.PIPE,
-#         stderr=subprocess.PIPE,
-#         shell=True,
-#         text=True
-#     )
-#     for line in iter(process.stdout.readline, ""):
-#         if line.strip():
-#             print_to_log_window(line.strip())
-#     for line in iter(process.stderr.readline, ""):
-#         if line.strip():
-#             print_to_log_window(f"Error: {line.strip()}")
-#     process.wait()

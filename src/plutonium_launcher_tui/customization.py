@@ -29,7 +29,7 @@ def set_terminal_size(app: App, x: int, y: int):
     for window in windows:
         try:
             window.resizeTo(x, y)
-            print(f"Resized window: {window.title} to {x}x{y}")
+            # print(f"Resized window: {window.title} to {x}x{y}")
         except Exception as e:
             e
 
