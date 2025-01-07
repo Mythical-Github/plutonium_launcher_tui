@@ -1,13 +1,11 @@
 To Do:
-    improve print outs for various interactions
-    appease the linter
-    check out input arg validation, seems to return blank when should not at times
     for mw3 passings args doesn't work, for that game, might have to edit configs
+    improve print outs for various interactions
+    check out input arg validation, seems to return blank when should not at times
+    appease the linter
 
 Later:
-    log text doesn't always wrap
     test and make work on linux
-    mention it works best on windows terminal in readme
 
 
 If Possible:
@@ -26,4 +24,3 @@ Maybes:
         normal url:
             https://cdn.plutoniummod.com/updater/prod/info.json
         update button, that opens up alternate screen with options to use https://github.com/mxve/plutonium-updater.rs, or button just updates, check about staging
-    load custom maps section
