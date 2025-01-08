@@ -1,18 +1,14 @@
 To Do:
-    improve print outs for various interactions
     appease the linter
 
 Later:
+    set terminal font size (8)
     test and make work on linux
 
 
-If Possible:
-    set terminal font size (8)
+Maybes:
     auto hide default scroll bar in terminal
     remember scrollbar placement for when the app is scrunched
-
-
-Maybes:
     non app data install options
     close game/pluto instances button
     pluto ascii art

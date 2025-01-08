@@ -75,11 +75,12 @@ class RemoveGlobalArgButton(Static):
         options = app.global_args_section.options
 
         if not len(options) > 0:
+            print_to_log_window('You cannot remove a non-existent argument')
             return
-
         global_arg = options[app.global_args_section.combo_box.value][0]
-
         print_to_log_window(f'Attempting to remove the following global argument: "{global_arg}"')
+
+
         remove_global_arg(global_arg)
         if get_current_selected_game().value == enums.PlutoniumGames.CALL_OF_DUTY_MODERN_WARFARE_III.value:
             remove_line_from_config(get_plutonium_modern_warfare_iii_config_path(), global_arg)
@@ -142,6 +143,7 @@ class RemoveGameArgButton(Static):
         options = app.game_args_section.options
 
         if not len(options) > 0:
+            print_to_log_window('You cannot remove a non-existent argument')
             return
 
         game_arg = options[app.game_args_section.combo_box.value][0]
@@ -202,7 +204,7 @@ class AutoRunGameCheckBox(Static):
     @on(Checkbox.Changed)
     def on_checkbox_changed(self, event: Checkbox.Changed) -> None:
         set_auto_run_game(event.value)
-        check_box_changed_message = f'{event.value}'
+        check_box_changed_message = f'Auto Run Game changed to "{event.value}"'
         print_to_log_window(check_box_changed_message)
 
 
@@ -218,7 +220,7 @@ class StagingCheckBox(Static):
     @on(Checkbox.Changed)
     def on_checkbox_changed(self, event: Checkbox.Changed) -> None:
         set_use_staging(event.value)
-        check_box_changed_message = f'{event.value}'
+        check_box_changed_message = f'Use Staging changed to "{event.value}"'
         print_to_log_window(check_box_changed_message)
 
 delay_spinbox = None
@@ -340,7 +342,9 @@ class PlutoniumGameModeSelector(Static):
 
     @on(Select.Changed)
     def select_changed(self, event: Select.Changed) -> None:
-        set_currently_selected_game_mode(enums.get_enum_from_val(enums.PlutoniumGameModes, self.options[event.value][0]))
+        if not get_currently_selected_game_mode() == enums.get_enum_from_val(enums.PlutoniumGameModes, self.options[event.value][0]):
+            set_currently_selected_game_mode(enums.get_enum_from_val(enums.PlutoniumGameModes, self.options[event.value][0]))
+            print_to_log_window(f'Changed selected game mode for "{get_current_selected_game()}" to "{get_currently_selected_game_mode().value}"')
 
 
     def on_mount(self):
@@ -388,7 +392,7 @@ class PlutoniumGameSelector(Static):
         app.game_mode_selector.refresh(recompose=True)
         app.game_dir_select.refresh(recompose=True)
         app.game_args_section.refresh(recompose=True)
-        print_to_log_window(f'Loaded settings for: {get_current_selected_game().value}')
+        print_to_log_window(f'Loaded settings for "{get_current_selected_game().value}"')
 
 
     def on_mount(self):
@@ -469,6 +473,7 @@ class PlutoniumUserBar(Static):
             yield self.add_button
         yield self.horizontal_box
 
+
     def on_mount(self):
         self.add_button.styles.height = "100%"
         self.remove_button.styles.height = "100%"
@@ -494,8 +499,7 @@ class GameDirectoryButton(Static):
 
     def on_button_pressed(self) -> None:
         game_dir = get_game_directory()
-        if os.path.isdir(game_dir):
-            open_directory_in_file_browser(game_dir)
+        open_directory_in_file_browser(game_dir)
 
     def on_mount(self):
         self.styles.width = "33%"

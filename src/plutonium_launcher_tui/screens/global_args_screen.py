@@ -14,7 +14,7 @@ class GlobalArgsScreen(text_input_screen.TextInputScreen):
         self.widget_to_refresh = widget_to_refresh
 
     def cancel(self, text_input):
-        print_to_log_window('The cancel button was pressed')
+        print_to_log_window('Cancelling adding of a new global argument')
 
     def confirm(self, text_input):
         text_value = text_input.value
@@ -25,5 +25,6 @@ class GlobalArgsScreen(text_input_screen.TextInputScreen):
             print_to_log_window('You cannot add a global argument that already exists')
         else:
             add_global_arg(text_value)
+            print_to_log_window(f'Added the following global argument "{text_value}"')
 
         text_input.value = ''

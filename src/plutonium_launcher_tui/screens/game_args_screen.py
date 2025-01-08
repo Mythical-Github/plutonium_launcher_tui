@@ -14,7 +14,7 @@ class GameArgsScreen(text_input_screen.TextInputScreen):
         self.widget_to_refresh = widget_to_refresh
 
     def cancel(self, text_input):
-        print_to_log_window('The cancel button was pressed')
+        print_to_log_window('Cancelling adding of a game argument')
 
     def confirm(self, text_input):
         text_value = text_input.value.strip()
@@ -24,3 +24,4 @@ class GameArgsScreen(text_input_screen.TextInputScreen):
             print_to_log_window('You cannot add a game argument that already exists')
         else:
             add_game_specific_arg(text_value)
+            print_to_log_window(f'Added the following game argument "{text_value}"')

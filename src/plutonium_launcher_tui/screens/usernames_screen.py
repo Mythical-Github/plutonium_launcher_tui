@@ -14,7 +14,7 @@ class UsernameScreen(text_input_screen.TextInputScreen):
         self.widget_to_refresh = widget_to_refresh
 
     def simulate_cancel_username_button_pressed(self, text_input):
-        print_to_log_window('The cancel button was pressed')
+        print_to_log_window('Cancelling adding of a new username')
 
     def simulate_confirm_username_button_pressed(self, text_input):
         text_value = text_input.value
@@ -24,4 +24,5 @@ class UsernameScreen(text_input_screen.TextInputScreen):
         elif text_value in get_usernames():
             print_to_log_window('You cannot add a username that already exists')
         else:
+            print_to_log_window(f'Added the following username to the username list "{text_value}"')
             set_username(text_value)

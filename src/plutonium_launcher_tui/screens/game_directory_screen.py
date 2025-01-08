@@ -16,7 +16,7 @@ class GameDirectoryScreen(text_input_screen.TextInputScreen):
         self.widget_to_refresh = widget_to_refresh
 
     def cancel(self, text_input):
-        print_to_log_window('The cancel button was pressed')
+        print_to_log_window('Cancelling directory selection')
 
     def confirm(self, text_input):
         print_to_log_window('The confirm button was pressed')

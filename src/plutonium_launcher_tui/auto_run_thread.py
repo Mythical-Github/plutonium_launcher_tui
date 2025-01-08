@@ -58,7 +58,10 @@ def periodic_check():
         check_theme()
 
         if get_spinbox() != None:
-            if delay != get_spinbox().value:
+            if not float(get_spinbox().value) == get_auto_run_game_delay():
+                from plutonium_launcher_tui.logger import print_to_log_window
+                spin_box_message = f'The Auto Run Game Delay has been set to "{get_spinbox().value}" Seconds'
+                print_to_log_window(spin_box_message)
                 set_auto_run_game_delay(get_spinbox().value)
 
         delay = get_auto_run_game_delay()
