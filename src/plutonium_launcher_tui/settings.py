@@ -385,7 +385,7 @@ def add_game_specific_arg(game_arg: str):
         error_message = 'Cannot add a blank argument to the game args'
         raise RuntimeError(error_message)
     game_args = get_game_specific_args()
-    game_args.append(game_arg)
+    game_args.insert(0, game_arg)
     set_game_specific_args(game_args)
 
 

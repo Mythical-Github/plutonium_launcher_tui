@@ -44,8 +44,8 @@ class AddGlobalArgButton(Static):
 
     def on_button_pressed(self) -> None:
         from plutonium_launcher_tui.main_app import app
-        app.global_args_screen.refresh(recompose=True)
-        app.push_screen(app.global_args_screen)
+        from plutonium_launcher_tui.screens import global_args_screen
+        app.push_screen(global_args_screen.GlobalArgsScreen(widget_to_refresh=self.parent.parent))
 
 
 def allow_global_args_blank() -> bool:
@@ -118,8 +118,8 @@ class AddGameArgButton(Static):
 
     def on_button_pressed(self) -> None:
         from plutonium_launcher_tui.main_app import app
-        app.global_args_screen.refresh(recompose=True)
-        app.push_screen(app.game_args_screen)
+        from plutonium_launcher_tui.screens import game_args_screen
+        app.push_screen(game_args_screen.GameArgsScreen(widget_to_refresh=self.parent.parent))
 
 
 class RemoveGameArgButton(Static):
@@ -282,8 +282,8 @@ class SelectGameDirectoryButton(Static):
 
     def on_button_pressed(self) -> None:
         from plutonium_launcher_tui.main_app import app
-        app.global_args_screen.refresh(recompose=True)
-        app.push_screen(app.game_directory_screen)
+        from plutonium_launcher_tui.screens import game_directory_screen
+        app.push_screen(game_directory_screen.GameDirectoryScreen(widget_to_refresh=self.parent.parent))
 
 
 class PlutoniumGameDirectoryBar(Static):
@@ -412,8 +412,8 @@ class AddUserButton(Static):
 
     def on_button_pressed(self) -> None:
         from plutonium_launcher_tui.main_app import app
-        app.global_args_screen.refresh(recompose=True)
-        app.push_screen(app.username_screen)
+        from plutonium_launcher_tui.screens import usernames_screen
+        app.push_screen(usernames_screen.UsernameScreen(widget_to_refresh=self.parent.parent))
 
 
 class RemoveUserButton(Static):

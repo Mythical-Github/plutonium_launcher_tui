@@ -4,7 +4,6 @@ To Do:
 
 Later:
     test and make work on linux
-    check out input arg validation, seems to return blank when should not at times
 
 
 If Possible:
@@ -14,6 +13,7 @@ If Possible:
 
 
 Maybes:
+    non app data install options
     close game/pluto instances button
     pluto ascii art
     current players in game, similar to their discord command for it
