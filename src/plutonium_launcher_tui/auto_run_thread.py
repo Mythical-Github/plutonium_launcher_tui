@@ -56,13 +56,13 @@ def periodic_check():
     while not stop_thread_event.is_set():
         set_window_title(get_title_for_app())
         check_theme()
-
-        if get_spinbox() != None:
-            if not float(get_spinbox().value) == get_auto_run_game_delay():
+        spin_box = get_spinbox()
+        if spin_box != None:
+            if not float(spin_box.value) == get_auto_run_game_delay():
                 from plutonium_launcher_tui.logger import print_to_log_window
-                spin_box_message = f'The Auto Run Game Delay has been set to "{get_spinbox().value}" Seconds'
+                spin_box_message = f'The Auto Run Game Delay has been set to "{spin_box.value}" Seconds'
                 print_to_log_window(spin_box_message)
-                set_auto_run_game_delay(get_spinbox().value)
+                set_auto_run_game_delay(spin_box.value)
 
         delay = get_auto_run_game_delay()
         if (time_passed - delay) > TOLERANCE:
@@ -73,7 +73,8 @@ def periodic_check():
                     action_on_condition()
                     last_run_time = current_time
         time.sleep(0.1)
-        time_passed = time_passed + 0.1
+        if get_auto_run_game():
+            time_passed = time_passed + 0.1
 
 app_instance = None
 def start_periodic_check_thread(app):
