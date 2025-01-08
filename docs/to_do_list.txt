@@ -1,11 +1,10 @@
 To Do:
-    for mw3 passings args doesn't work, for that game, might have to edit configs
     improve print outs for various interactions
-    check out input arg validation, seems to return blank when should not at times
     appease the linter
 
 Later:
     test and make work on linux
+    check out input arg validation, seems to return blank when should not at times
 
 
 If Possible:

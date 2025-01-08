@@ -11,6 +11,7 @@ from plutonium_launcher_tui.base_widgets import (
     BasePlutoniumLauncherHorizontalBox,
     BasePlutoniumLauncherLabel,
 )
+from plutonium_launcher_tui.plutonium import get_valid_plutonium_game_mode_options, get_plutonium_game_selector_options
 from plutonium_launcher_tui.logger import print_to_log_window
 from plutonium_launcher_tui.os_file_browser import open_directory_in_file_browser
 from plutonium_launcher_tui.os_web_browser import open_website
@@ -21,7 +22,6 @@ from plutonium_launcher_tui.settings import (
     get_current_username,
     get_currently_selected_game_mode,
     get_game_directory,
-    get_game_mode_options,
     get_game_specific_args,
     get_global_args,
     get_use_staging,
@@ -316,7 +316,7 @@ class PlutoniumGameModeSelector(Static):
         self.game_mode_label = BasePlutoniumLauncherLabel("Game Mode:")
 
         # generate this from the enum later
-        self.options = get_game_mode_options()
+        self.options = get_valid_plutonium_game_mode_options()
 
         main_value = None
         current_game = get_currently_selected_game_mode().value
@@ -352,13 +352,7 @@ class PlutoniumGameSelector(Static):
         self.horizontal_box = BasePlutoniumLauncherHorizontalBox()
         self.game_mode_label = BasePlutoniumLauncherLabel("Game:")
 
-        # create this from the enum later
-        self.options = [
-            ("Call of Duty World at War", 0),
-            ("Call of Duty Modern Warfare III", 1),
-            ("Call of Duty Black Ops I", 2),
-            ("Call of Duty Black Ops II", 3),
-        ]
+        self.options = get_plutonium_game_selector_options()
 
         main_value = None
         current_game = get_current_selected_game().value
