@@ -1,21 +1,21 @@
 import os
 import subprocess
 
-from plutonium_launcher_tui.plutonium import (
-    get_games_to_game_mod_args_dict, 
-    get_plutonium_bootstrapper, 
-    get_plutonium_appdata_dir,
-    add_line_to_config,
-    get_plutonium_modern_warfare_iii_config_path
-)
 from plutonium_launcher_tui.logger import print_to_log_window
+from plutonium_launcher_tui.plutonium import (
+    add_line_to_config,
+    get_games_to_game_mod_args_dict,
+    get_plutonium_appdata_dir,
+    get_plutonium_bootstrapper,
+    get_plutonium_modern_warfare_iii_config_path,
+)
 from plutonium_launcher_tui.settings import (
     get_current_selected_game,
     get_current_username,
     get_currently_selected_game_mode,
     get_game_directory,
     get_game_specific_args,
-    get_global_args
+    get_global_args,
 )
 
 
@@ -35,7 +35,7 @@ def run_game_mw3():
 
     for arg in get_global_args():
         exe = f'{exe} {arg}'
-    
+
     for arg in get_game_specific_args():
         add_line_to_config(get_plutonium_modern_warfare_iii_config_path(), arg)
 

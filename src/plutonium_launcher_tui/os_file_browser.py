@@ -8,7 +8,7 @@ def open_directory_in_file_browser(directory_path: str):
     if os.path.isdir(directory_path):
         program = "explorer"
         subprocess.run(
-            [program, directory_path], 
+            [program, directory_path],
             check=False,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,

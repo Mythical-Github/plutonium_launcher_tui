@@ -11,10 +11,10 @@ from plutonium_launcher_tui.base_widgets import (
     BasePlutoniumLauncherHorizontalBox,
     BasePlutoniumLauncherLabel,
 )
-from plutonium_launcher_tui.plutonium import get_valid_plutonium_game_mode_options, get_plutonium_game_selector_options
 from plutonium_launcher_tui.logger import print_to_log_window
 from plutonium_launcher_tui.os_file_browser import open_directory_in_file_browser
 from plutonium_launcher_tui.os_web_browser import open_website
+from plutonium_launcher_tui.plutonium import get_plutonium_game_selector_options, get_valid_plutonium_game_mode_options
 from plutonium_launcher_tui.settings import (
     get_auto_run_game,
     get_auto_run_game_delay,
@@ -48,10 +48,7 @@ class AddGlobalArgButton(Static):
 
 
 def allow_global_args_blank() -> bool:
-    if len(get_global_args()) == 0:
-        return True
-    else:
-        return False
+    return len(get_global_args()) == 0
 
 
 class RemoveGlobalArgButton(Static):
@@ -198,7 +195,7 @@ class AutoRunGameCheckBox(Static):
 
     @on(Checkbox.Changed)
     def on_checkbox_changed(self, event: Checkbox.Changed) -> None:
-        set_auto_run_game(event.value)
+        set_auto_run_game(auto_run_game=event.value)
         check_box_changed_message = f'{event.value}'
         print_to_log_window(check_box_changed_message)
 

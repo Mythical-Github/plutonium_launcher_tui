@@ -1,11 +1,11 @@
 import os
 
 from plutonium_launcher_tui.enums import PlutoniumGameModes, PlutoniumGames
-from plutonium_launcher_tui.settings import get_use_staging, get_current_selected_game
+from plutonium_launcher_tui.settings import get_current_selected_game, get_use_staging
 
 
 def get_games_to_game_mod_args_dict():
-    game_mode_args = {
+    return {
         PlutoniumGames.CALL_OF_DUTY_WORLD_AT_WAR.value: {
             PlutoniumGameModes.SINGLE_PLAYER: 't4sp',
             PlutoniumGameModes.MULTIPLAYER: 't4mp',
@@ -22,7 +22,6 @@ def get_games_to_game_mod_args_dict():
             PlutoniumGameModes.MULTIPLAYER: 't6mp',
         },
     }
-    return game_mode_args
 
 
 def get_plutonium_appdata_dir() -> str:
@@ -50,11 +49,10 @@ def get_valid_plutonium_game_mode_options():
         return [
             ("Multiplayer", 0)
         ]
-    else:
-        return [
-            ("Single Player", 0),
-            ("Multiplayer", 1)
-        ]
+    return [
+        ("Single Player", 0),
+        ("Multiplayer", 1)
+    ]
 
 
 def get_plutonium_game_selector_options():
@@ -67,7 +65,7 @@ def get_plutonium_game_selector_options():
 
 
 def get_all_lines_in_config(config_path: str) -> list[str]:
-    with open(config_path, 'r', encoding='utf-8') as file:
+    with open(config_path, encoding='utf-8') as file:
         return file.readlines()
 
 
@@ -85,7 +83,8 @@ def add_line_to_config(config_path: str, line: str):
 def remove_line_from_config(config_path: str, line: str):
     lines = get_all_lines_in_config(config_path)
     with open(config_path, 'w', encoding='utf-8') as file:
-        file.writelines(l for l in lines if l.rstrip('\n') != line)
+        file.writelines(current_line for current_line in lines if current_line.rstrip('\n') != line)
+
 
 
 def does_config_have_line(config_path: str, line: str) -> bool:
