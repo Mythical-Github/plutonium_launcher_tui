@@ -5,17 +5,21 @@ from textual.app import ComposeResult
 from textual.widgets import Checkbox, Select, Static
 from textual_spinbox import SpinBox
 
-from plutonium_launcher_tui.plutonium import remove_line_from_config, get_plutonium_modern_warfare_iii_config_path
 from plutonium_launcher_tui import enums, game_runner
 from plutonium_launcher_tui.base_widgets import (
     BasePlutoniumLauncherButton,
     BasePlutoniumLauncherHorizontalBox,
     BasePlutoniumLauncherLabel,
 )
-from plutonium_launcher_tui.plutonium import get_valid_plutonium_game_mode_options, get_plutonium_game_selector_options
 from plutonium_launcher_tui.logger import print_to_log_window
 from plutonium_launcher_tui.os_file_browser import open_directory_in_file_browser
 from plutonium_launcher_tui.os_web_browser import open_website
+from plutonium_launcher_tui.plutonium import (
+    get_plutonium_game_selector_options,
+    get_plutonium_modern_warfare_iii_config_path,
+    get_valid_plutonium_game_mode_options,
+    remove_line_from_config,
+)
 from plutonium_launcher_tui.settings import (
     get_auto_run_game,
     get_auto_run_game_delay,
@@ -342,7 +346,7 @@ class PlutoniumGameModeSelector(Static):
 
     @on(Select.Changed)
     def select_changed(self, event: Select.Changed) -> None:
-        if not get_currently_selected_game_mode() == enums.get_enum_from_val(enums.PlutoniumGameModes, self.options[event.value][0]):
+        if get_currently_selected_game_mode() != enums.get_enum_from_val(enums.PlutoniumGameModes, self.options[event.value][0]):
             set_currently_selected_game_mode(enums.get_enum_from_val(enums.PlutoniumGameModes, self.options[event.value][0]))
             print_to_log_window(f'Changed selected game mode for "{get_current_selected_game()}" to "{get_currently_selected_game_mode().value}"')
 

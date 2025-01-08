@@ -393,7 +393,7 @@ def remove_game_specific_arg(game_arg: str):
     game_args = get_game_specific_args()
     game_args.remove(game_arg)
     set_game_specific_args(game_args)
-    from plutonium_launcher_tui.plutonium import remove_line_from_config, get_plutonium_modern_warfare_iii_config_path
+    from plutonium_launcher_tui.plutonium import get_plutonium_modern_warfare_iii_config_path, remove_line_from_config
     remove_line_from_config(get_plutonium_modern_warfare_iii_config_path(), game_arg)
 
 

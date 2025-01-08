@@ -1,7 +1,7 @@
 import os
 
 from plutonium_launcher_tui.enums import PlutoniumGameModes, PlutoniumGames
-from plutonium_launcher_tui.settings import get_use_staging, get_current_selected_game
+from plutonium_launcher_tui.settings import get_current_selected_game, get_use_staging
 
 
 def get_games_to_game_mod_args_dict():
@@ -67,7 +67,7 @@ def get_plutonium_game_selector_options():
 
 
 def get_all_lines_in_config(config_path: str) -> list[str]:
-    with open(config_path, 'r', encoding='utf-8') as file:
+    with open(config_path, encoding='utf-8') as file:
         return file.readlines()
 
 
