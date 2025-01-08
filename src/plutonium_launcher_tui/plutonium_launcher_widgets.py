@@ -5,6 +5,7 @@ from textual.app import ComposeResult
 from textual.widgets import Checkbox, Select, Static
 from textual_spinbox import SpinBox
 
+from plutonium_launcher_tui.plutonium import remove_line_from_config, get_plutonium_modern_warfare_iii_config_path
 from plutonium_launcher_tui import enums, game_runner
 from plutonium_launcher_tui.base_widgets import (
     BasePlutoniumLauncherButton,
@@ -80,6 +81,8 @@ class RemoveGlobalArgButton(Static):
 
         print_to_log_window(f'Attempting to remove the following global argument: "{global_arg}"')
         remove_global_arg(global_arg)
+        if get_current_selected_game().value == enums.PlutoniumGames.CALL_OF_DUTY_MODERN_WARFARE_III.value:
+            remove_line_from_config(get_plutonium_modern_warfare_iii_config_path(), global_arg)
         app.global_args_section.refresh(recompose=True)
 
 

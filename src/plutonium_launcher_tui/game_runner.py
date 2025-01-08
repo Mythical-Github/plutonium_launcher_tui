@@ -34,7 +34,7 @@ def run_game_mw3():
     exe = f'{exe} -lan'
 
     for arg in get_global_args():
-        exe = f'{exe} {arg}'
+        add_line_to_config(get_plutonium_modern_warfare_iii_config_path(), arg)
     
     for arg in get_game_specific_args():
         add_line_to_config(get_plutonium_modern_warfare_iii_config_path(), arg)
