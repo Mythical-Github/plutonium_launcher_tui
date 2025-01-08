@@ -27,13 +27,11 @@ def get_current_selected_game() -> enums.PlutoniumGames:
     global_settings = SETTINGS.get('global', {})
     last_selected_game = global_settings.get('last_selected_game')
 
-    selected_game_enum = enums.get_enum_from_val(enums.PlutoniumGames, last_selected_game)
+    if last_selected_game not in enums.PlutoniumGames._value2member_map_:
+        last_selected_game = enums.PlutoniumGames.CALL_OF_DUTY_WORLD_AT_WAR
+        set_current_selected_game(last_selected_game)
 
-    if selected_game_enum is None:
-        selected_game_enum = enums.PlutoniumGames.CALL_OF_DUTY_WORLD_AT_WAR
-        set_current_selected_game(selected_game_enum)
-
-    return selected_game_enum
+    return last_selected_game
 
 
 def set_current_selected_game(game: enums.PlutoniumGames):
@@ -51,12 +49,12 @@ def get_auto_run_game():
 
     if not auto_run_game:
         auto_run_game = False
-        set_auto_run_game(auto_run_game=auto_run_game)
+        set_auto_run_game(auto_run_game)
 
     return auto_run_game
 
 
-def set_auto_run_game(*, auto_run_game: bool):
+def set_auto_run_game(auto_run_game: bool):
     if 'global' not in SETTINGS:
         SETTINGS['global'] = {}
 
@@ -275,7 +273,7 @@ def get_use_staging() -> bool:
     return bool(use_staging)
 
 
-def set_use_staging(*, use_staging: bool):
+def set_use_staging(use_staging: bool):
     if 'global' not in SETTINGS:
         SETTINGS['global'] = {}
 
@@ -395,7 +393,7 @@ def remove_game_specific_arg(game_arg: str):
     game_args = get_game_specific_args()
     game_args.remove(game_arg)
     set_game_specific_args(game_args)
-    from plutonium_launcher_tui.plutonium import get_plutonium_modern_warfare_iii_config_path, remove_line_from_config
+    from plutonium_launcher_tui.plutonium import remove_line_from_config, get_plutonium_modern_warfare_iii_config_path
     remove_line_from_config(get_plutonium_modern_warfare_iii_config_path(), game_arg)
 
 

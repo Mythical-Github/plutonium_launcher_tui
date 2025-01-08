@@ -13,7 +13,7 @@ class UsernameScreen(text_input_screen.TextInputScreen):
         )
         self.widget_to_refresh = widget_to_refresh
 
-    def simulate_cancel_username_button_pressed(self):
+    def simulate_cancel_username_button_pressed(self, text_input):
         print_to_log_window('The cancel button was pressed')
 
     def simulate_confirm_username_button_pressed(self, text_input):

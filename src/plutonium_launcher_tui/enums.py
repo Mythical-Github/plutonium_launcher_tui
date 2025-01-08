@@ -21,4 +21,7 @@ def get_enum_from_val(enum: Enum, value: str) -> Enum:
 
 
 def get_enum_strings_from_enum(enum: Enum) -> list[str]:
-    return [get_enum_from_val(enum=Enum, value=entry) for entry in enum]
+    strings = []
+    for entry in enum:
+        strings.append(get_enum_from_val(enum=Enum, value=entry))
+    return strings

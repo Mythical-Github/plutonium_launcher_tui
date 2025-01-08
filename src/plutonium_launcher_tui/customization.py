@@ -11,7 +11,10 @@ def set_terminal_size(app: App, x: int, y: int):
     windows = [win for win in all_windows if app.TITLE in win.title]
 
     for window in windows:
-        window.resizeTo(x, y)
+        try:
+            window.resizeTo(x, y)
+        except Exception as e:
+            e
 
 
 # def set_window_title(window_title: str):
