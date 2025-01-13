@@ -1,5 +1,6 @@
 
 ## Plutonium Launcher TUI
+- This tool is no longer getting updates, and all of it's functionality has been merged into [Shoal](https://github.com/Mythical-Github/shoal).
 - This is a text-based UI launcher for the COD client [Plutonium](https://plutonium.pw/).
 - Click [here](https://github.com/Mythical-Github/plutonium_launcher_tui/releases/latest/download/plutonium_launcher_tui.zip) to download the latest prebuilt exe release.
 
